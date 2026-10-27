@@ -218,3 +218,17 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local AI-agent workflow guidance and planning artifacts
+AGENTS.md
+AGENTS.override.md
+CLAUDE.md
+GEMINI.md
+GOALS.md
+PLANS.md
+PROMPTS.md
+.agents/
+.agent/
+.codex/
+harness/
+memory-bank/
