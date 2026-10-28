@@ -5,6 +5,73 @@ from streamlit.testing.v1 import AppTest
 
 
 class AppSmokeTests(unittest.TestCase):
+    def test_feedback_page_shows_form_inputs(self) -> None:
+        app = AppTest.from_file(Path(__file__).parents[1] / "app.py").run()
+
+        app.sidebar.radio[0].set_value("Feedback").run()
+
+        self.assertFalse(app.exception)
+        self.assertEqual(len(app.text_input), 1)
+        self.assertEqual(len(app.text_area), 1)
+        self.assertEqual(len(app.radio), 2)
+        self.assertEqual(len(app.multiselect), 1)
+        self.assertEqual(len(app.form_submit_button), 1)
+
+    def test_feedback_form_requires_name_and_message(self) -> None:
+        invalid_submissions = [
+            ("   ", "The message is present."),
+            ("Alex", "   "),
+        ]
+
+        for visitor_name, message in invalid_submissions:
+            with self.subTest(visitor_name=visitor_name, message=message):
+                app = AppTest.from_file(Path(__file__).parents[1] / "app.py").run()
+                app.sidebar.radio[0].set_value("Feedback").run()
+
+                app.text_input[0].set_value(visitor_name)
+                app.text_area[0].set_value(message)
+                app.form_submit_button[0].click().run()
+
+                self.assertFalse(app.exception)
+                self.assertTrue(
+                    any(
+                        item.value == "Please enter your name and a message."
+                        for item in app.error
+                    )
+                )
+                self.assertEqual(len(app.success), 0)
+
+    def test_feedback_form_confirms_valid_submission_locally(self) -> None:
+        app = AppTest.from_file(Path(__file__).parents[1] / "app.py").run()
+        app.sidebar.radio[0].set_value("Feedback").run()
+
+        app.text_input[0].set_value("  Alex  ")
+        app.text_area[0].set_value("Great portfolio.")
+        app.form_submit_button[0].click().run()
+
+        self.assertFalse(app.exception)
+        self.assertEqual(len(app.error), 0)
+        self.assertTrue(any("Alex" in item.value for item in app.success))
+        confirmation = app.session_state["feedback_confirmation"]
+        self.assertIn("Alex", confirmation)
+        self.assertNotIn("Great portfolio.", confirmation)
+        for response_key in (
+            "feedback_name",
+            "feedback_topic",
+            "feedback_sections",
+            "feedback_message",
+        ):
+            self.assertNotIn(response_key, app.session_state)
+
+        app.sidebar.radio[0].set_value("About").run()
+        app.sidebar.radio[0].set_value("Feedback").run()
+        self.assertTrue(
+            any(
+                item.value == confirmation
+                for item in app.success
+            )
+        )
+
     def test_portfolio_previous_next_respect_group_boundaries(self):
         app = AppTest.from_file(Path(__file__).parents[1] / 'app.py').run()
         app.sidebar.radio[0].set_value('Portfolio').run()
