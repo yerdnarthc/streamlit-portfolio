@@ -105,21 +105,140 @@ html.portfolio-motion-ready [data-motion="feedback-success"] {
 }
 
 html.portfolio-motion-ready [data-motion="project-stage"][data-motion-state="pending"] {
-  clip-path: inset(0 0 8% 0);
-  transform: translate3d(12px, 10px, 0) scale(0.992);
+  clip-path: inset(0 0 6% 0);
+  filter: saturate(0.82);
+  transform: translate3d(0, 8px, 0) scale(0.995);
 }
 
 html.portfolio-motion-ready [data-motion="project-stage"] {
   transition-duration: 560ms;
 }
 
-html.portfolio-motion-ready [data-motion="dialog"][data-motion-state="pending"] {
-  transform: translate3d(0, 14px, 0) scale(0.975);
+html.portfolio-motion-ready
+  [data-motion="project-stage"][data-motion-state="revealed"]
+  [class*="st-key-pf_project_identity_"] {
+  animation: project-copy-enter 520ms var(--motion-ease-emphasized) both;
 }
 
-html.portfolio-motion-ready [data-motion="dialog"] {
+html.portfolio-motion-ready
+  [data-motion="project-stage"][data-motion-state="revealed"]
+  [class*="st-key-pf_project_media_"] {
+  animation: project-media-enter 580ms var(--motion-ease-emphasized) 55ms both;
+}
+
+html.portfolio-motion-ready
+  [data-motion="project-stage"][data-motion-state="revealed"]
+  [class*="st-key-pf_project_tabs_"] {
+  animation: project-tabs-enter 440ms var(--motion-ease-emphasized) 120ms both;
+}
+
+@keyframes project-copy-enter {
+  0% {
+    clip-path: inset(0 10% 0 0);
+    opacity: 0;
+    transform: translate3d(-14px, 0, 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes project-media-enter {
+  0% {
+    clip-path: inset(0 0 0 12%);
+    filter: saturate(0.72) contrast(0.94);
+    opacity: 0;
+    transform: translate3d(16px, 0, 0) scale(0.992);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    filter: none;
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes project-tabs-enter {
+  0% {
+    clip-path: inset(12% 0 0 0);
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+html.portfolio-motion-ready [role="dialog"] {
+  animation: portfolio-dialog-enter 480ms var(--motion-ease-emphasized) both;
   transform-origin: 50% 42%;
-  transition-duration: 420ms;
+}
+
+html.portfolio-motion-ready
+  [role="dialog"]
+  .st-key-pf_modal_image_stage {
+  animation: portfolio-dialog-media-enter 620ms var(--motion-ease-emphasized)
+    70ms both;
+}
+
+html.portfolio-motion-ready
+  [class*="st-key-pf_project_media_"]:has(
+    [class*="st-key-pf_enlarge_"] button:focus
+  )
+  [class*="st-key-pf_preview_frame"] {
+  animation: portfolio-preview-return 460ms var(--motion-ease-emphasized);
+}
+
+@keyframes portfolio-dialog-enter {
+  0% {
+    clip-path: inset(3% 0 3% 0);
+    filter: saturate(0.78);
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.975);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    filter: none;
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes portfolio-dialog-media-enter {
+  0% {
+    clip-path: inset(0 0 100% 0);
+    filter: saturate(0.72) contrast(0.94);
+    opacity: 0;
+    transform: scale(0.988);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    filter: none;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes portfolio-preview-return {
+  0% {
+    filter: saturate(0.78) brightness(0.9);
+    transform: perspective(950px) rotateX(var(--motion-tilt-x))
+      rotateY(var(--motion-tilt-y)) translate3d(0, 0, 0) scale(0.985);
+  }
+  62% {
+    filter: saturate(1.04) brightness(1.03);
+    transform: perspective(950px) rotateX(var(--motion-tilt-x))
+      rotateY(var(--motion-tilt-y)) translate3d(0, 0, 0) scale(1.008);
+  }
+  100% {
+    filter: none;
+    transform: perspective(950px) rotateX(var(--motion-tilt-x))
+      rotateY(var(--motion-tilt-y)) translate3d(0, 0, 0) scale(1);
+  }
 }
 
 .st-key-feedback_success {
@@ -454,5 +573,29 @@ html.portfolio-motion-ready
 
   .st-key-feedback_success [data-testid="stAlert"] {
     animation: feedback-reduced-confirm 180ms ease-out both;
+  }
+
+  html.portfolio-motion-ready
+    [data-motion="project-stage"][data-motion-state="revealed"]
+    [class*="st-key-pf_project_identity_"],
+  html.portfolio-motion-ready
+    [data-motion="project-stage"][data-motion-state="revealed"]
+    [class*="st-key-pf_project_media_"],
+  html.portfolio-motion-ready
+    [data-motion="project-stage"][data-motion-state="revealed"]
+    [class*="st-key-pf_project_tabs_"] {
+    animation: none !important;
+  }
+
+  html.portfolio-motion-ready [role="dialog"],
+  html.portfolio-motion-ready
+    [role="dialog"]
+    .st-key-pf_modal_image_stage,
+  html.portfolio-motion-ready
+    [class*="st-key-pf_project_media_"]:has(
+      [class*="st-key-pf_enlarge_"] button:focus
+    )
+    [class*="st-key-pf_preview_frame"] {
+    animation: none !important;
   }
 }

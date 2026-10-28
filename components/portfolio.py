@@ -222,41 +222,43 @@ def _render_project_stage(project: PortfolioProject, asset_dir: Path) -> None:
     info_col, preview_col = st.columns([1.05, 0.95], gap="large")
 
     with info_col:
-        st.subheader(project.title)
-        st.caption(f"{role}  ·  {status}")
+        with st.container(key=f"pf_project_identity_{project.slug}"):
+            st.subheader(project.title)
+            st.caption(f"{role}  ·  {status}")
 
-        if chips:
-            chips_html = " ".join(f'<span class="pf-chip">{c}</span>' for c in chips)
-            st.html(f'<div class="pf-chips-wrapper">{chips_html}</div>')
+            if chips:
+                chips_html = " ".join(f'<span class="pf-chip">{c}</span>' for c in chips)
+                st.html(f'<div class="pf-chips-wrapper">{chips_html}</div>')
 
-        with st.container(horizontal=True):
-            if repo_url:
-                st.link_button("Repository", repo_url, icon=":material/open_in_new:")
-            if demo_url:
-                st.link_button("Live Demo", demo_url, icon=":material/open_in_new:")
+            with st.container(horizontal=True):
+                if repo_url:
+                    st.link_button("Repository", repo_url, icon=":material/open_in_new:")
+                if demo_url:
+                    st.link_button("Live Demo", demo_url, icon=":material/open_in_new:")
 
-        if overview_text:
-            st.markdown("#### Overview")
-            st.markdown(overview_text)
+            if overview_text:
+                st.markdown("#### Overview")
+                st.markdown(overview_text)
 
     with preview_col:
-        frame_key = "pf_preview_frame_portrait" if is_portrait else "pf_preview_frame_landscape"
-        with st.container(key=frame_key):
-            if img_path.is_file():
-                st.image(str(img_path), width="stretch", alt=f"{project.title} preview")
-            else:
-                st.caption(f"Preview unavailable for {project.title}.")
-
-        if img_path.is_file():
-            if st.button(
-                "Enlarge Preview",
-                icon=":material/zoom_in:",
-                key=f"pf_enlarge_{project.slug}",
-            ):
-                if is_portrait:
-                    _enlarge_preview_portrait(project, asset_dir)
+        with st.container(key=f"pf_project_media_{project.slug}"):
+            frame_key = "pf_preview_frame_portrait" if is_portrait else "pf_preview_frame_landscape"
+            with st.container(key=frame_key):
+                if img_path.is_file():
+                    st.image(str(img_path), width="stretch", alt=f"{project.title} preview")
                 else:
-                    _enlarge_preview_landscape(project, asset_dir)
+                    st.caption(f"Preview unavailable for {project.title}.")
+
+            if img_path.is_file():
+                if st.button(
+                    "Enlarge Preview",
+                    icon=":material/zoom_in:",
+                    key=f"pf_enlarge_{project.slug}",
+                ):
+                    if is_portrait:
+                        _enlarge_preview_portrait(project, asset_dir)
+                    else:
+                        _enlarge_preview_landscape(project, asset_dir)
 
 
 def _render_project_tabs(project: PortfolioProject) -> None:
@@ -272,12 +274,13 @@ def _render_project_tabs(project: PortfolioProject) -> None:
         available_labels = [k for k in sections_dict if k != "Overview" and k != "Tools Used"]
 
     if available_labels:
-        st.divider()
-        tab_names = [tab_map.get(k, k) for k in available_labels]
-        tabs = st.tabs(tab_names)
-        for tab, raw_key in zip(tabs, available_labels):
-            with tab:
-                st.markdown(sections_dict[raw_key])
+        with st.container(key=f"pf_project_tabs_{project.slug}"):
+            st.divider()
+            tab_names = [tab_map.get(k, k) for k in available_labels]
+            tabs = st.tabs(tab_names)
+            for tab, raw_key in zip(tabs, available_labels):
+                with tab:
+                    st.markdown(sections_dict[raw_key])
 
 
 @st.fragment

@@ -1,7 +1,9 @@
 const ENGINE_KEY = "__arthPortfolioMotionEngine";
-const ENGINE_VERSION = "1.0.3";
+const ENGINE_VERSION = "1.1.0";
 const ROOT_SELECTOR = '[data-testid="stAppViewContainer"]';
 const MAIN_SCROLL_SELECTOR = '[data-testid="stMain"]';
+const PORTFOLIO_TABS_SELECTOR =
+  '[class*="st-key-pf_project_tabs_"] [data-testid="stTabs"]';
 const PAGE_ROOTS = [
   ["about", ".st-key-about_page"],
   ["autobiography", ".st-key-autobiography_page"],
@@ -105,11 +107,7 @@ const REVEAL_GROUPS = [
     selector: '[class*="st-key-pf_project_stage_"]',
     motion: "project-stage",
     replay: true,
-  },
-  {
-    selector: '[role="dialog"]',
-    motion: "dialog",
-    replay: true,
+    eager: true,
   },
   {
     selector: ".st-key-feedback_intro",
@@ -160,8 +158,11 @@ function createMotionEngine() {
   );
   const revealTargets = new Set();
   const tiltTargets = new Set();
+  const liveAnimations = new Set();
   const seenRevealIdentities = new Set();
   const initialGroupsBound = new Set();
+  const portfolioTabStates = new WeakMap();
+  const portfolioTabAnimations = new WeakMap();
   let destroyed = false;
   let discoveryFrame = 0;
   let pageScrollFrame = 0;
@@ -326,6 +327,70 @@ function createMotionEngine() {
     );
   };
 
+  const trackAnimation = (animation) => {
+    if (!animation) return null;
+    liveAnimations.add(animation);
+    animation.addEventListener(
+      "finish",
+      () => {
+        liveAnimations.delete(animation);
+        animation.cancel();
+      },
+      { once: true },
+    );
+    animation.addEventListener(
+      "cancel",
+      () => liveAnimations.delete(animation),
+      { once: true },
+    );
+    return animation;
+  };
+
+  const animateActivePortfolioTab = (tabGroup, previousIndex, selectedIndex) => {
+    const panel = tabGroup.querySelector('[data-testid="stTabPanel"]');
+    if (!panel?.animate) return;
+
+    portfolioTabAnimations.get(tabGroup)?.cancel();
+    const direction = selectedIndex > previousIndex ? 1 : -1;
+    const keyframes = reducedMotion.matches
+      ? [{ opacity: 0.72 }, { opacity: 1 }]
+      : [
+          {
+            clipPath:
+              direction > 0 ? "inset(0 8% 0 0)" : "inset(0 0 0 8%)",
+            opacity: 0.24,
+            transform: `translate3d(${direction * 10}px, 0, 0)`,
+          },
+          {
+            clipPath: "inset(0 0 0 0)",
+            opacity: 1,
+            transform: "translate3d(0, 0, 0)",
+          },
+        ];
+    const animation = panel.animate(keyframes, {
+      duration: reducedMotion.matches ? 140 : 360,
+      easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+      fill: "both",
+    });
+    portfolioTabAnimations.set(tabGroup, animation);
+    trackAnimation(animation);
+  };
+
+  const discoverPortfolioTabs = () => {
+    document.querySelectorAll(PORTFOLIO_TABS_SELECTOR).forEach((tabGroup) => {
+      const tabs = [...tabGroup.querySelectorAll('[role="tab"]')];
+      const selectedIndex = tabs.findIndex(
+        (tab) => tab.getAttribute("aria-selected") === "true",
+      );
+      if (selectedIndex < 0) return;
+
+      const previousIndex = portfolioTabStates.get(tabGroup);
+      portfolioTabStates.set(tabGroup, selectedIndex);
+      if (previousIndex === undefined || previousIndex === selectedIndex) return;
+      animateActivePortfolioTab(tabGroup, previousIndex, selectedIndex);
+    });
+  };
+
   const updateScrollProgress = () => {
     scrollFrame = 0;
     if (!autobiographyTimeline?.isConnected) return;
@@ -415,6 +480,7 @@ function createMotionEngine() {
     });
 
     document.querySelectorAll(TILT_SELECTOR).forEach(bindTilt);
+    discoverPortfolioTabs();
     autobiographyTimeline = document.querySelector(
       ".st-key-autobiography_timeline",
     );
@@ -453,7 +519,12 @@ function createMotionEngine() {
   };
 
   const mount = () => {
-    mutationObserver.observe(mutationRoot, { childList: true, subtree: true });
+    mutationObserver.observe(mutationRoot, {
+      attributes: true,
+      attributeFilter: ["aria-selected"],
+      childList: true,
+      subtree: true,
+    });
     window.addEventListener("scroll", scheduleScrollProgress, {
       signal,
       passive: true,
@@ -491,6 +562,8 @@ function createMotionEngine() {
     if (discoveryFrame) cancelAnimationFrame(discoveryFrame);
     if (pageScrollFrame) cancelAnimationFrame(pageScrollFrame);
     if (scrollFrame) cancelAnimationFrame(scrollFrame);
+    liveAnimations.forEach((animation) => animation.cancel());
+    liveAnimations.clear();
 
     revealTargets.forEach((element) => {
       element.removeAttribute("data-motion");

@@ -141,8 +141,10 @@ Project-owned selectors are the primary contract:
 - `st-key-feedback_*`
 - `st-key-sidebar_identity`, `st-key-primary_navigation`
 
-Streamlit hooks are limited to `stAppViewContainer`, `stButton`, `stLinkButton`,
-`stDownloadButton`, `stMetric`, `stImage`, and `stAlert`.
+Streamlit hooks are limited to `stMain`, `stButton`, `stLinkButton`,
+`stDownloadButton`, `stMetric`, `stImage`, `stAlert`, `stTabs`, and `stTabPanel`.
+The single mutation observer is rooted at `document.body` because Streamlit
+portals dialogs outside the app-view container.
 
 ## Responsive and Reduced Motion
 
