@@ -56,3 +56,11 @@ class VisualSystemTests(unittest.TestCase):
         css = Path("assets/styles/app.css").read_text(encoding="utf-8")
 
         self.assertNotIn('[data-testid="stSidebar"] *', css)
+
+    def test_autobiography_timeline_uses_readable_editorial_measure(self) -> None:
+        css = Path("assets/styles/app.css").read_text(encoding="utf-8")
+
+        self.assertIn('[class*="st-key-autobio_chapter_"]', css)
+        self.assertIn(".st-key-autobiography_timeline", css)
+        self.assertIn("max-width: 72ch", css)
+        self.assertIn("font-size: clamp(3rem", css)

@@ -1,9 +1,79 @@
 """Safe interactive and PDF helpers for the autobiography section."""
 
 import ast
+from dataclasses import dataclass
 import re
 
 from fpdf import FPDF
+
+
+@dataclass(frozen=True)
+class AutobiographyChapter:
+    """One chronological reading section derived from the source narrative."""
+
+    number: int
+    title: str
+    markdown: str
+
+
+@dataclass(frozen=True)
+class AutobiographyStructure:
+    """Editorial structure layered over the student's unchanged prose."""
+
+    title: str
+    preface: str
+    chapters: tuple[AutobiographyChapter, ...]
+
+
+_CHAPTER_MARKERS = (
+    ("Origins", "Born on"),
+    ("Moving and growing", "By around year 2018"),
+    ("Choosing Computer Science", "During Senior High School"),
+    ("College", "Then, here comes College"),
+    ("The present", "Computers really fascinate me"),
+)
+
+
+def structure_autobiography(markdown: str) -> AutobiographyStructure:
+    """Add chronological chapters without rewriting the source paragraphs."""
+    heading = re.match(r"^#\s+(.+?)\s*(?:\n+|$)", markdown)
+    title = heading.group(1) if heading else "Autobiography"
+    body = markdown[heading.end() :] if heading else markdown
+    blocks = [block.strip() for block in re.split(r"\n\s*\n", body) if block.strip()]
+
+    marker_positions: list[int] = []
+    for _, marker in _CHAPTER_MARKERS:
+        matches = [index for index, block in enumerate(blocks) if block.startswith(marker)]
+        if len(matches) != 1:
+            return AutobiographyStructure(title, body.strip(), ())
+        marker_positions.append(matches[0])
+
+    if marker_positions != sorted(marker_positions):
+        return AutobiographyStructure(title, body.strip(), ())
+
+    chapter_at = {
+        position: chapter_title
+        for position, (chapter_title, _) in zip(marker_positions, _CHAPTER_MARKERS)
+    }
+
+    preface_blocks: list[str] = []
+    grouped_chapters: list[tuple[str, list[str]]] = []
+    for index, block in enumerate(blocks):
+        chapter_title = chapter_at.get(index)
+        if chapter_title:
+            grouped_chapters.append((chapter_title, [block]))
+        elif grouped_chapters:
+            grouped_chapters[-1][1].append(block)
+        else:
+            preface_blocks.append(block)
+
+    chapters = tuple(
+        AutobiographyChapter(number, chapter_title, "\n\n".join(chapter_blocks))
+        for number, (chapter_title, chapter_blocks) in enumerate(
+            grouped_chapters, start=1
+        )
+    )
+    return AutobiographyStructure(title, "\n\n".join(preface_blocks), chapters)
 
 
 def split_closing_print(markdown: str) -> tuple[str, str | None]:

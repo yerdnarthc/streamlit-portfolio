@@ -2,12 +2,67 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from utils.autobiography import build_autobiography_pdf, run_print_statement
+from utils.autobiography import (
+    build_autobiography_pdf,
+    run_print_statement,
+    structure_autobiography,
+)
 from utils.content import load_markdown, parse_skills_markdown, remove_image_markdown
 from components.portfolio import parse_portfolio_projects
 
 
 class ContentTests(unittest.TestCase):
+    def test_structure_autobiography_builds_chapters_without_changing_prose(self):
+        source = (
+            "# My Autobiography\n\n"
+            "A human-written preface.\n\n"
+            "Born on a September morning.\n\n"
+            "My childhood continued.\n\n"
+            "By around year 2018, we moved.\n\n"
+            "During Senior High School days, I chose a course.\n\n"
+            "Then, here comes College.\n\n"
+            "Computers really fascinate me.\n\n"
+            "This is my life."
+        )
+
+        structure = structure_autobiography(source)
+
+        self.assertEqual(structure.title, "My Autobiography")
+        self.assertEqual(
+            [chapter.title for chapter in structure.chapters],
+            [
+                "Origins",
+                "Moving and growing",
+                "Choosing Computer Science",
+                "College",
+                "The present",
+            ],
+        )
+        reconstructed = "\n\n".join(
+            [structure.preface, *(chapter.markdown for chapter in structure.chapters)]
+        )
+        self.assertEqual(reconstructed, source.split("\n\n", maxsplit=1)[1])
+
+    def test_structure_autobiography_rejects_incomplete_or_reordered_markers(self):
+        preface = "# My Autobiography\n\nA human-written preface.\n\n"
+        valid_blocks = [
+            "Born on a September morning.",
+            "By around year 2018, we moved.",
+            "During Senior High School days, I chose a course.",
+            "Then, here comes College.",
+            "Computers really fascinate me.",
+        ]
+        invalid_variants = {
+            "missing": valid_blocks[:2] + valid_blocks[3:],
+            "duplicate": valid_blocks + [valid_blocks[-1]],
+            "reordered": [valid_blocks[0], valid_blocks[2], valid_blocks[1], *valid_blocks[3:]],
+        }
+
+        for case, blocks in invalid_variants.items():
+            with self.subTest(case=case):
+                structure = structure_autobiography(preface + "\n\n".join(blocks))
+                self.assertEqual(structure.chapters, ())
+
     def test_portfolio_groups_follow_source_headings(self):
         projects = parse_portfolio_projects(Path('contents/my-portfolio.md').read_text(encoding='utf-8'))
         self.assertEqual([p.title for p in projects.values() if p.group == 'More Projects'],

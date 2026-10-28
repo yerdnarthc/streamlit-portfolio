@@ -131,6 +131,39 @@ class AppSmokeTests(unittest.TestCase):
         self.assertGreaterEqual(len(app.dataframe), 1)
         self.assertTrue(any("Skill" in metric.label for metric in app.metric))
 
+    def test_autobiography_page_renders_editorial_chapters(self) -> None:
+        app = AppTest.from_file(Path(__file__).parents[1] / "app.py").run()
+
+        app.sidebar.radio[0].set_value("Autobiography").run()
+
+        self.assertFalse(app.exception)
+        self.assertTrue(any(h.value == "My Autobiography" for h in app.header))
+        self.assertEqual(
+            [heading.value for heading in app.subheader],
+            [
+                "Origins",
+                "Moving and growing",
+                "Choosing Computer Science",
+                "College",
+                "The present",
+            ],
+        )
+        self.assertTrue(
+            any("Born on the 1st of September" in item.value for item in app.markdown)
+        )
+        self.assertEqual([item.value for item in app.text], ["01", "02", "03", "04", "05"])
+
+        source = Path("contents/my-autobiography.md").read_text(encoding="utf-8")
+        narrative = source.rsplit("\n\nprint(", maxsplit=1)[0]
+        source_paragraphs = [
+            paragraph.strip()
+            for paragraph in narrative.split("\n\n")[1:]
+            if paragraph.strip()
+        ]
+        rendered_markdown = "\n\n".join(item.value for item in app.markdown)
+        for paragraph in source_paragraphs:
+            self.assertEqual(rendered_markdown.count(paragraph), 1)
+
     def test_autobiography_code_panel_runs_the_closing_message(self) -> None:
         app = AppTest.from_file(Path(__file__).parents[1] / "app.py")
 

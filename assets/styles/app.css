@@ -393,6 +393,159 @@ textarea:focus-visible,
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
+   AUTOBIOGRAPHY — EDITORIAL LIFE TIMELINE
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.st-key-autobiography_page {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+.st-key-autobiography_preface {
+  margin: 0.5rem 0 3.5rem;
+  padding: 1.5rem 0 1.75rem;
+  border-top: 1px solid var(--portfolio-accent-deep);
+  border-bottom: 1px solid var(--portfolio-border);
+}
+
+.st-key-autobiography_preface [data-testid="stMarkdownContainer"] p {
+  max-width: 72ch;
+  margin: 0 !important;
+  color: var(--portfolio-muted-white) !important;
+  font-size: 1.05rem !important;
+  line-height: 1.85 !important;
+}
+
+.st-key-autobiography_timeline {
+  position: relative;
+  margin-left: 0.25rem;
+  padding-left: 2rem;
+  border-left: 1px solid var(--portfolio-accent-deep);
+}
+
+[class*="st-key-autobio_chapter_"] {
+  position: relative;
+  padding: 2.75rem 0 3rem;
+  border-top: 1px solid var(--portfolio-border);
+}
+
+.st-key-autobio_chapter_05 {
+  border-bottom: 1px solid var(--portfolio-border);
+}
+
+[class*="st-key-autobio_chapter_"]::before {
+  content: "";
+  position: absolute;
+  top: 3rem;
+  left: -2.3rem;
+  width: 7px;
+  height: 7px;
+  background: var(--portfolio-background);
+  border: 1px solid var(--portfolio-accent-strong);
+}
+
+[class*="st-key-autobio_chapter_"] [data-testid="stColumn"]:first-child {
+  min-width: 0;
+  padding-right: 1.25rem;
+}
+
+[class*="st-key-autobio_chapter_"] [data-testid="stColumn"]:first-child [data-testid="stText"] {
+  margin: 0 !important;
+  color: var(--portfolio-accent-strong) !important;
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", monospace !important;
+  font-size: clamp(3rem, 6vw, 5.5rem) !important;
+  font-weight: 700 !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em !important;
+  line-height: 0.85 !important;
+}
+
+[class*="st-key-autobio_chapter_"] [data-testid="stColumn"]:first-child [data-testid="stText"] * {
+  color: inherit !important;
+  font: inherit !important;
+  letter-spacing: inherit !important;
+  line-height: inherit !important;
+}
+
+[class*="st-key-autobio_chapter_"] [data-testid="stColumn"]:last-child {
+  min-width: 0;
+}
+
+[class*="st-key-autobio_chapter_"] [data-testid="stColumn"]:last-child h3 {
+  max-width: 22ch;
+  margin: -0.2rem 0 1rem !important;
+  color: var(--portfolio-muted-white) !important;
+  font-family: Geist, sans-serif !important;
+  font-size: clamp(1.55rem, 2.8vw, 2.25rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.15 !important;
+  text-wrap: balance;
+}
+
+[class*="st-key-autobio_chapter_"] [data-testid="stColumn"]:last-child p {
+  max-width: 72ch;
+  color: var(--portfolio-foreground) !important;
+  font-size: 0.98rem !important;
+  line-height: 1.85 !important;
+}
+
+.st-key-autobiography_code_panel {
+  margin-top: 2.75rem;
+  padding: 0.5rem;
+  border-color: var(--portfolio-accent-deep) !important;
+  background: var(--portfolio-surface) !important;
+}
+
+.st-key-autobiography_download {
+  padding-top: 0.25rem;
+}
+
+@media (max-width: 640px) {
+  .st-key-autobiography_preface {
+    margin-bottom: 2rem;
+    padding-block: 1.1rem 1.25rem;
+  }
+
+  .st-key-autobiography_preface [data-testid="stMarkdownContainer"] p,
+  [class*="st-key-autobio_chapter_"] [data-testid="stColumn"]:last-child p {
+    max-width: 100%;
+    font-size: 0.95rem !important;
+    line-height: 1.75 !important;
+  }
+
+  [class*="st-key-autobio_chapter_"] {
+    padding: 1.75rem 0 2rem;
+  }
+
+  .st-key-autobiography_timeline {
+    padding-left: 1.25rem;
+  }
+
+  [class*="st-key-autobio_chapter_"]::before {
+    top: 2rem;
+    left: -1.55rem;
+  }
+
+  [class*="st-key-autobio_chapter_"] [data-testid="stColumn"]:first-child {
+    width: 100%;
+    border-bottom: 1px solid var(--portfolio-accent-deep);
+    padding: 0 0 0.75rem;
+  }
+
+  [class*="st-key-autobio_chapter_"] [data-testid="stColumn"]:first-child [data-testid="stText"] {
+    font-size: 2.5rem !important;
+    line-height: 1 !important;
+  }
+
+  [class*="st-key-autobio_chapter_"] [data-testid="stColumn"]:last-child h3 {
+    margin-top: 0 !important;
+    font-size: 1.55rem !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
    PORTFOLIO (DISTILLED CRAFT)
    ══════════════════════════════════════════════════════════════════════════════ */
 
