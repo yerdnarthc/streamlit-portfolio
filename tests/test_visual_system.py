@@ -1,5 +1,8 @@
 from pathlib import Path
 import unittest
+from unittest.mock import patch
+
+from components.ui import apply_visual_system
 
 
 class VisualSystemTests(unittest.TestCase):
@@ -22,3 +25,13 @@ class VisualSystemTests(unittest.TestCase):
 
         self.assertTrue((font_directory / "JetBrainsMonoNerdFont-Regular.ttf").is_file())
         self.assertTrue((font_directory / "Geist-Bold.woff2").is_file())
+
+    def test_visual_system_sends_stylesheet_as_a_style_element(self) -> None:
+        stylesheet = Path("assets/styles/app.css")
+
+        with patch("components.ui.st.html") as render_html:
+            apply_visual_system(stylesheet)
+
+        rendered_css = render_html.call_args.args[0]
+        self.assertTrue(rendered_css.startswith("<style>"))
+        self.assertTrue(rendered_css.endswith("</style>"))

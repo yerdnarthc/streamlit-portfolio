@@ -37,4 +37,4 @@ def apply_visual_system(stylesheet: Path) -> None:
             continue
         css = css.replace(marker, _font_data_uri(font_path))
 
-    st.html(css)
+    st.html(f"<style>{css}</style>")
