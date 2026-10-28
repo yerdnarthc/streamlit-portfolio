@@ -10,6 +10,7 @@ from components.feedback import render_feedback
 from components.portfolio import render_portfolio
 from components.skills import render_skills
 from components.ui import apply_visual_system
+from ui.motion import apply_motion_styles, mount_motion_runtime
 
 
 ROOT = Path(__file__).parent
@@ -36,14 +37,18 @@ st.set_page_config(
 # )
 
 apply_visual_system(ROOT / "assets" / "styles" / "app.css")
+apply_motion_styles()
+mount_motion_runtime()
 
 with st.sidebar:
-    st.title("Arth Andrey C. Endrina")
+    with st.container(key="sidebar_identity"):
+        st.title("Arth Andrey C. Endrina")
     st.caption("Computer Science · 3rd Year · CIT-U")
     st.divider()
     page = st.radio(
         "Navigation",
         ["About", "Autobiography", "Skills", "Portfolio", "Feedback"],
+        key="primary_navigation",
         label_visibility="collapsed",
     )
 

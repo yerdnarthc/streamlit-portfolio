@@ -686,7 +686,8 @@ textarea:focus-visible,
   letter-spacing: 0.04em !important;
   border-radius: 0 !important;
   padding: 0.5rem 0.75rem !important;
-  transition: all 160ms ease-out !important;
+  transition: background-color 160ms ease-out, border-color 160ms ease-out,
+    color 160ms ease-out, transform 160ms ease-out !important;
 }
 
 [class*="st-key-pf_index_bar"] [data-testid="stButton"] button[kind="secondary"] {
@@ -1085,13 +1086,7 @@ textarea:focus-visible,
 }
 
 @media (prefers-reduced-motion: reduce) {
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
+  html {
     scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
   }
 }

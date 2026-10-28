@@ -348,12 +348,19 @@ def _portfolio_theater(projects: dict[str, PortfolioProject], asset_dir: Path) -
                     on_click=_select_project, args=(titles[min(len(titles) - 1, position + 1)],),
                 )
         st.divider()
-        _render_project_stage(active_project, asset_dir)
-        _render_project_tabs(active_project)
+        with st.container(key=f"pf_project_stage_{active_project.slug}"):
+            _render_project_stage(active_project, asset_dir)
+            _render_project_tabs(active_project)
 
 
 def render_portfolio(content_dir: Path, asset_dir: Path) -> None:
     """Present the student's work as a clean, production-grade portfolio."""
+    with st.container(key="portfolio_page"):
+        _render_portfolio_content(content_dir, asset_dir)
+
+
+def _render_portfolio_content(content_dir: Path, asset_dir: Path) -> None:
+    """Render the prepared portfolio inside its stable page wrapper."""
     st.header("Portfolio")
 
     source = load_markdown(content_dir / "my-portfolio.md")

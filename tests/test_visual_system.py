@@ -64,3 +64,21 @@ class VisualSystemTests(unittest.TestCase):
         self.assertIn(".st-key-autobiography_timeline", css)
         self.assertIn("max-width: 72ch", css)
         self.assertIn("font-size: clamp(3rem", css)
+
+    def test_motion_runtime_has_one_observer_pair_and_explicit_cleanup(self) -> None:
+        script = Path("ui/motion/motion.js").read_text(encoding="utf-8")
+
+        self.assertEqual(script.count("new MutationObserver"), 1)
+        self.assertEqual(script.count("new IntersectionObserver"), 1)
+        self.assertIn("abortController.abort()", script)
+        self.assertIn("mutationObserver.disconnect()", script)
+        self.assertIn("intersectionObserver?.disconnect()", script)
+        self.assertIn("return () =>", script)
+
+    def test_motion_is_progressive_and_has_a_reduced_motion_strategy(self) -> None:
+        app_css = Path("assets/styles/app.css").read_text(encoding="utf-8")
+        motion_css = Path("ui/motion/motion.css").read_text(encoding="utf-8")
+
+        self.assertIn("html.portfolio-motion-ready", motion_css)
+        self.assertIn("prefers-reduced-motion: reduce", motion_css)
+        self.assertNotIn("transition: all", app_css + motion_css)

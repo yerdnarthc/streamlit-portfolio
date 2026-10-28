@@ -1,0 +1,243 @@
+:root {
+  --motion-duration-fast: 120ms;
+  --motion-duration-medium: 320ms;
+  --motion-duration-slow: 560ms;
+  --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-reveal-distance: 18px;
+  --motion-hover-lift: -2px;
+}
+
+html.portfolio-motion-ready [data-motion] {
+  transition-delay: var(--motion-delay, 0ms);
+  transition-duration: var(--motion-duration-medium);
+  transition-property: opacity, transform, clip-path, filter;
+  transition-timing-function: var(--motion-ease-emphasized);
+}
+
+html.portfolio-motion-ready [data-motion-state="pending"] {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+html.portfolio-motion-ready [data-motion-state="revealed"] {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+  filter: blur(0);
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+html.portfolio-motion-ready [data-motion="hero-title"][data-motion-state="pending"] {
+  clip-path: inset(0 0 45% 0);
+  filter: blur(3px);
+  transform: translate3d(0, 22px, 0);
+}
+
+html.portfolio-motion-ready [data-motion="hero-title"] {
+  transition-duration: var(--motion-duration-slow);
+}
+
+html.portfolio-motion-ready [data-motion="page-title"][data-motion-state="pending"] {
+  clip-path: inset(0 0 30% 0);
+  filter: blur(2px);
+  transform: translate3d(0, 14px, 0);
+}
+
+html.portfolio-motion-ready [data-motion="page-title"] {
+  transition-duration: 480ms;
+}
+
+html.portfolio-motion-ready [data-motion="shell"][data-motion-state="pending"] {
+  transform: translate3d(-14px, 0, 0);
+}
+
+html.portfolio-motion-ready [data-motion="nav-item"][data-motion-state="pending"],
+html.portfolio-motion-ready [data-motion="line-item"][data-motion-state="pending"] {
+  transform: translate3d(-10px, 0, 0);
+}
+
+html.portfolio-motion-ready [data-motion="image-mask"][data-motion-state="pending"] {
+  clip-path: inset(0 0 100% 0);
+  filter: saturate(0.72) contrast(0.92);
+  transform: scale(0.985);
+}
+
+html.portfolio-motion-ready [data-motion="image-mask"] {
+  transition-duration: 680ms;
+}
+
+html.portfolio-motion-ready [data-motion="editorial"][data-motion-state="pending"] {
+  clip-path: inset(0 0 20% 0);
+  transform: translate3d(0, 16px, 0);
+}
+
+html.portfolio-motion-ready [data-motion="chapter"][data-motion-state="pending"] {
+  transform: translate3d(var(--motion-x, -16px), 10px, 0);
+}
+
+html.portfolio-motion-ready [data-motion="control-group"][data-motion-state="pending"] {
+  transform: translate3d(0, 9px, 0);
+}
+
+html.portfolio-motion-ready [data-motion="metric"][data-motion-state="pending"] {
+  transform: translate3d(0, 12px, 0) scale(0.985);
+}
+
+html.portfolio-motion-ready [data-motion="panel"][data-motion-state="pending"],
+html.portfolio-motion-ready [data-motion="feedback"][data-motion-state="pending"] {
+  transform: translate3d(0, 12px, 0) scale(0.992);
+}
+
+html.portfolio-motion-ready [data-motion="project-stage"][data-motion-state="pending"] {
+  clip-path: inset(0 0 8% 0);
+  transform: translate3d(12px, 10px, 0) scale(0.992);
+}
+
+html.portfolio-motion-ready [data-motion="project-stage"] {
+  transition-duration: 440ms;
+}
+
+html.portfolio-motion-ready [data-motion="dialog"][data-motion-state="pending"] {
+  transform: translate3d(0, 14px, 0) scale(0.975);
+}
+
+html.portfolio-motion-ready [data-motion="dialog"] {
+  transform-origin: 50% 42%;
+  transition-duration: 380ms;
+}
+
+.st-key-autobiography_timeline::after {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  width: 1px;
+  background: var(--portfolio-accent-strong);
+  content: "";
+  pointer-events: none;
+  transform: scaleY(var(--motion-scroll-progress, 0));
+  transform-origin: top;
+  will-change: transform;
+}
+
+.motion-tilt-target {
+  --motion-tilt-x: 0deg;
+  --motion-tilt-y: 0deg;
+  --motion-shift-x: 0px;
+  --motion-shift-y: 0px;
+  --motion-media-scale: 1;
+  transform: perspective(950px) rotateX(var(--motion-tilt-x))
+    rotateY(var(--motion-tilt-y)) translate3d(0, 0, 0);
+  transform-style: preserve-3d;
+  transition: transform 420ms var(--motion-ease-emphasized),
+    border-color var(--motion-duration-fast) ease-out !important;
+}
+
+.motion-tilt-target.motion-interacting {
+  transition-duration: 90ms, var(--motion-duration-fast) !important;
+}
+
+.motion-tilt-target img {
+  transform: translate3d(
+      var(--motion-shift-x),
+      var(--motion-shift-y),
+      0
+    )
+    scale(var(--motion-media-scale)) !important;
+  transition: transform 420ms var(--motion-ease-emphasized) !important;
+}
+
+.motion-tilt-target.motion-interacting img {
+  transition-duration: 90ms !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-testid="stButton"] > button:not(:disabled),
+  [data-testid="stLinkButton"] > a,
+  [data-testid="stDownloadButton"] > button,
+  [role="tab"],
+  .st-key-primary_navigation label {
+    transition-duration: var(--motion-duration-fast) !important;
+    transition-property: background-color, border-color, color, transform !important;
+    transition-timing-function: var(--motion-ease-standard) !important;
+  }
+
+  [data-testid="stButton"] > button:not(:disabled):hover,
+  [data-testid="stLinkButton"] > a:hover,
+  [data-testid="stDownloadButton"] > button:hover {
+    transform: translate3d(0, var(--motion-hover-lift), 0);
+  }
+
+  .st-key-primary_navigation label:hover,
+  .st-key-primary_navigation label:has(input:checked) {
+    transform: translate3d(4px, 0, 0);
+  }
+
+  .motion-tilt-target:hover {
+    --motion-media-scale: 1.018;
+  }
+}
+
+[data-testid="stButton"] > button:not(:disabled):active,
+[data-testid="stLinkButton"] > a:active,
+[data-testid="stDownloadButton"] > button:active {
+  transform: translate3d(0, 0, 0) scale(0.985);
+  transition-duration: 80ms !important;
+}
+
+.st-key-primary_navigation label {
+  position: relative;
+}
+
+.st-key-primary_navigation label::after {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 1px;
+  height: 58%;
+  background: var(--portfolio-accent-strong);
+  content: "";
+  opacity: 0;
+  transform: translate3d(3px, -50%, 0) scaleY(0.25);
+  transform-origin: center;
+  transition: opacity var(--motion-duration-fast) ease-out,
+    transform var(--motion-duration-medium) var(--motion-ease-emphasized);
+}
+
+.st-key-primary_navigation label:has(input:checked)::after {
+  opacity: 1;
+  transform: translate3d(0, -50%, 0) scaleY(1);
+}
+
+@media (max-width: 899px), (hover: none), (pointer: coarse) {
+  .motion-tilt-target,
+  .motion-tilt-target img {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.portfolio-motion-ready [data-motion] {
+    clip-path: none !important;
+    filter: none !important;
+    transform: none !important;
+    transition-delay: 0ms !important;
+    transition-duration: var(--motion-duration-fast) !important;
+    transition-property: opacity !important;
+  }
+
+  .st-key-autobiography_timeline::after {
+    transform: scaleY(1);
+    will-change: auto;
+  }
+
+  .motion-tilt-target,
+  .motion-tilt-target img,
+  [data-testid="stButton"] > button,
+  [data-testid="stLinkButton"] > a,
+  [data-testid="stDownloadButton"] > button,
+  .st-key-primary_navigation label {
+    transform: none !important;
+  }
+}
