@@ -29,8 +29,7 @@
 html,
 body,
 [data-testid="stAppViewContainer"],
-[data-testid="stSidebar"],
-[data-testid="stSidebar"] * {
+[data-testid="stSidebar"] {
   font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", Consolas, monospace;
 }
 

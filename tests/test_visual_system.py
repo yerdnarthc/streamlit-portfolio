@@ -35,3 +35,8 @@ class VisualSystemTests(unittest.TestCase):
         rendered_css = render_html.call_args.args[0]
         self.assertTrue(rendered_css.startswith("<style>"))
         self.assertTrue(rendered_css.endswith("</style>"))
+
+    def test_sidebar_does_not_override_streamlit_icon_fonts(self) -> None:
+        css = Path("assets/styles/app.css").read_text(encoding="utf-8")
+
+        self.assertNotIn('[data-testid="stSidebar"] *', css)
