@@ -1,4 +1,4 @@
-"""Render the student's About section."""
+"""Render the student's About section with clear typographic hierarchy."""
 
 from pathlib import Path
 
@@ -22,6 +22,6 @@ def render_about(content_dir: Path, asset_dir: Path) -> None:
     with photo_column:
         profile_photo = asset_dir / "profile" / "me.png"
         if profile_photo.is_file():
-            st.image(profile_photo, caption="Arth Andrey C. Endrina")
+            st.image(profile_photo, caption="Arth Andrey C. Endrina", width="stretch")
         else:
             st.warning("Profile photo could not be loaded.")

@@ -2,8 +2,9 @@
   --portfolio-background: #191919;
   --portfolio-surface: #252323;
   --portfolio-surface-raised: #302c2c;
-  --portfolio-foreground: #bbbaba;
-  --portfolio-muted: #918f8f;
+  --portfolio-foreground: #afacac;
+  --portfolio-muted: #a8a5a5;
+  --portfolio-muted-white: #dbd6d6;
   --portfolio-border: #423838;
   --portfolio-accent: #965a5a;
   --portfolio-accent-strong: #b67474;
@@ -30,13 +31,71 @@ body,
   background: transparent;
 }
 
-h1,
-h2,
-h3,
-[data-testid="stHeading"] {
-  font-family: Geist, "JetBrainsMono Nerd Font", sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+/* ══════════════════════════════════════════════════════════════════════════════
+   PRIMARY TYPOGRAPHIC HIERARCHY
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Generic Content Markdown (must exclude dedicated stHeading components) */
+[data-testid="stMain"] [data-testid="stMarkdownContainer"]:not([data-testid="stHeading"] *) h1,
+[data-testid="stMain"] [data-testid="stMarkdownContainer"]:not([data-testid="stHeading"] *) h1 *,
+[data-testid="stMain"] [data-testid="stMarkdownContainer"]:not([data-testid="stHeading"] *) h1 [data-heading-text] {
+  font-family: Geist, "JetBrainsMono Nerd Font", sans-serif !important;
+  font-size: 2.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--portfolio-foreground) !important;
+  margin-bottom: 1rem;
+}
+
+/* Content Markdown H2 subheaders (e.g. ## Name, ## Program, ## Year, etc.) */
+[data-testid="stMain"] [data-testid="stMarkdownContainer"]:not([data-testid="stHeading"] *) h2,
+[data-testid="stMain"] [data-testid="stMarkdownContainer"]:not([data-testid="stHeading"] *) h2 *,
+[data-testid="stMain"] [data-testid="stMarkdownContainer"]:not([data-testid="stHeading"] *) h2 [data-heading-text] {
+  font-family: "JetBrainsMono Nerd Font", sans-serif !important;
+  font-size: 1.5rem !important;
+  font-weight: 200 !important;
+  letter-spacing: -0.015em !important;
+  color: var(--portfolio-foreground) !important;
+}
+
+[data-testid="stMain"] h4 {
+  font-family: "JetBrainsMono Nerd Font", sans-serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--portfolio-foreground) !important;
+  margin-top: 1rem !important;
+  margin-bottom: 0.35rem !important;
+}
+
+/* Level 2: Component Subheaders (st.subheader) */
+[data-testid="stMain"] [data-testid="stHeading"] h3,
+[data-testid="stMain"] [data-testid="stHeading"] h3 *,
+[data-testid="stMain"] [data-testid="stHeading"] h3 [data-heading-text],
+[data-testid="stMain"] h3,
+[data-testid="stMain"] h3 * {
+  font-family: "JetBrainsMono Nerd Font", sans-serif !important;
+  font-size: 2.5rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--portfolio-foreground) !important;
+  margin-bottom: 0.5rem;
+}
+
+/* Level 1: Primary Section Headers (st.header — Strictly isolated to st.header() in main canvas) */
+[data-testid="stMain"] [data-testid="stHeading"] h2,
+[data-testid="stMain"] [data-testid="stHeading"] h2 *,
+[data-testid="stMain"] [data-testid="stHeading"] h2 [data-heading-text] {
+  font-family: Geist, "JetBrainsMono Nerd Font", sans-serif !important;
+  font-size: 5rem !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.035em !important;
+  color: var(--portfolio-muted-white) !important;
+  margin-top: 0 !important;
+  margin-bottom: 1.5rem !important;
+  padding-bottom: 0.25rem !important;
 }
 
 [data-testid="stSidebar"] {
@@ -44,14 +103,65 @@ h3,
   border-right: 1px solid var(--portfolio-border);
 }
 
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h1 *,
+[data-testid="stSidebar"] [data-testid="stHeading"] h1,
+[data-testid="stSidebar"] [data-testid="stHeading"] h1 *,
+[data-testid="stSidebar"] [data-heading-text] {
+  font-family: Geist, "JetBrainsMono Nerd Font", sans-serif !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.015em !important;
+  color: var(--portfolio-foreground) !important;
+  margin-top: 0 !important;
+  margin-bottom: 0.2rem !important;
+}
 
-[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
-[data-testid="stCaptionContainer"] {
+[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.02em !important;
+  color: var(--portfolio-muted) !important;
+  line-height: 1.4 !important;
+  margin-bottom: 0.25rem !important;
+}
+
+[data-testid="stSidebar"] hr {
+  margin: 0.65rem 0 0.85rem !important;
+  border-color: var(--portfolio-border) !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label {
+  font-family: Geist, sans-serif !important;
+  font-size: 0.88rem !important;
+  font-weight: 500 !important;
+  color: var(--portfolio-muted) !important;
+  padding: 0.3rem 0.4rem !important;
+  transition: color 140ms ease-out !important;
+  border-radius: 0 !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
+  color: var(--portfolio-foreground) !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) {
+  color: var(--portfolio-foreground) !important;
+  font-weight: 600 !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
   color: var(--portfolio-muted);
 }
 
+p,
+[data-testid="stMarkdownContainer"] p {
+  font-size: 0.95rem !important;
+}
+
 [data-testid="stAlert"],
-[data-testid="stAlert"] > div {
+[data-testid="stAlert"]>div {
   background: var(--portfolio-surface-raised) !important;
   border: 1px solid var(--portfolio-accent-deep) !important;
   border-radius: 0 !important;
@@ -75,12 +185,13 @@ h3,
   border-radius: 0 !important;
 }
 
-[data-testid="stButton"] > button,
-[data-testid="stDownloadButton"] > button,
+[data-testid="stButton"]>button,
+[data-testid="stLinkButton"]>a,
+[data-testid="stDownloadButton"]>button,
 [data-testid="stTextInput"] input,
 [data-testid="stTextArea"] textarea,
-[data-testid="stSelectbox"] > div > div,
-[data-testid="stMultiSelect"] > div > div,
+[data-testid="stSelectbox"]>div>div,
+[data-testid="stMultiSelect"]>div>div,
 [data-testid="stDataFrame"],
 [data-testid="stForm"],
 [data-testid="stMetric"],
@@ -89,26 +200,49 @@ h3,
   border-radius: 0 !important;
 }
 
+/* Metric Display Values ("9", "7.3/10", etc.) */
+[data-testid="stMetricValue"],
+[data-testid="stMetricValue"] p,
+[data-testid="stMetricValue"] [data-testid="stMarkdownContainer"] p {
+  font-family: "JetBrainsMono Nerd Font", sans-serif !important;
+  font-size: 2.25rem !important;
+  /* adjust this value to make it larger or smaller */
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  color: var(--portfolio-foreground) !important;
+}
+
+/* Metric Labels ("Highest Skill Rating", "Average Skill Rating") */
+[data-testid="stMetricLabel"],
+[data-testid="stMetricLabel"] p {
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 1rem !important;
+  letter-spacing: 0.03em !important;
+  color: var(--portfolio-muted) !important;
+  margin-bottom: 0.5rem;
+}
+
 [data-testid="stRadioGroup"] {
   gap: 5px;
 }
 
-[data-testid="stButton"] > button,
-[data-testid="stLinkButton"] > a,
-[data-testid="stDownloadButton"] > button {
+[data-testid="stButton"]>button,
+[data-testid="stLinkButton"]>a,
+[data-testid="stDownloadButton"]>button {
   background: var(--portfolio-accent-deep);
   border: 1px solid var(--portfolio-accent-strong);
   color: var(--portfolio-foreground);
   font-weight: 700;
+  border-radius: 0 !important;
 }
 
 [data-testid="stDownloadButton"] {
   margin-top: 2rem;
 }
 
-[data-testid="stButton"] > button:hover,
-[data-testid="stLinkButton"] > a:hover,
-[data-testid="stDownloadButton"] > button:hover {
+[data-testid="stButton"]>button:hover,
+[data-testid="stLinkButton"]>a:hover,
+[data-testid="stDownloadButton"]>button:hover {
   background: var(--portfolio-accent);
   border-color: var(--portfolio-accent-strong);
 }
@@ -185,34 +319,274 @@ textarea:focus-visible,
   border-color: var(--portfolio-accent-strong);
 }
 
-.st-key-work_gallery { max-width: 1120px; margin-inline: auto; }
-[class*="st-key-work_thumbnail_"] img {
-  width: 100%; height: 170px; object-fit: contain;
-  background: var(--portfolio-surface); border-radius: 0;
+/* ══════════════════════════════════════════════════════════════════════════════
+   ABOUT SECTION
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.about-lead-bio {
+  font-family: Geist, sans-serif !important;
+  font-size: 1.05rem !important;
+  line-height: 1.8 !important;
+  color: var(--portfolio-foreground) !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 1.75rem !important;
+  max-width: 68ch !important;
 }
-.st-key-work_detail_preview img {
-  width: 100%; max-height: 240px; object-fit: contain; border-radius: 0;
+
+.about-spec-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0.65rem !important;
+  border-top: 1px solid var(--portfolio-border) !important;
+  padding-top: 1.25rem !important;
+  margin-top: 1.5rem !important;
+  max-width: 68ch !important;
 }
-[class*="st-key-work_card_"] {
-  border-top: 1px solid var(--portfolio-border);
-  padding-top: 12px;
+
+.about-spec-item {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  border-bottom: 1px solid rgba(66, 56, 56, 0.45) !important;
+  padding-bottom: 0.55rem !important;
 }
-[class*="st-key-work_card_"] h4 { min-height: 3.5em; }
-.st-key-work_gallery [data-testid="stButton"] button {
-  border-radius: 0; min-height: 44px;
+
+.about-spec-label {
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: var(--portfolio-muted) !important;
 }
-.st-key-work_gallery [data-testid="stButton"] button[kind="secondary"] {
-  background: transparent; border-color: var(--portfolio-border);
+
+.about-spec-value {
+  font-family: Geist, "JetBrainsMono Nerd Font", sans-serif !important;
+  font-size: 0.92rem !important;
+  font-weight: 600 !important;
+  color: var(--portfolio-foreground) !important;
+  text-align: right !important;
 }
-.st-key-work_gallery [data-testid="stButton"] button:hover {
+
+[class*="st-key-about_photo_frame"] {
+  border: 1px solid var(--portfolio-border) !important;
+  background: var(--portfolio-surface) !important;
+  padding: 0.5rem !important;
+  border-radius: 0 !important;
+  max-width: 320px !important;
+  margin: 0 auto !important;
+}
+
+[class*="st-key-about_photo_frame"] img {
+  border-radius: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+}
+
+[class*="st-key-about_photo_frame"] [data-testid="stCaptionContainer"] {
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 0.74rem !important;
+  text-align: center !important;
+  margin-top: 0.5rem !important;
+  color: var(--portfolio-muted) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   PORTFOLIO (DISTILLED CRAFT)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Project Index Bar */
+[class*="st-key-pf_index_bar"] [data-testid="stHorizontalBlock"] {
+  gap: 0.5rem !important;
+  align-items: stretch !important;
+}
+
+[class*="st-key-pf_index_bar"] [data-testid="stButton"] button {
+  min-height: 40px !important;
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  border-radius: 0 !important;
+  padding: 0.5rem 0.75rem !important;
+  transition: all 160ms ease-out !important;
+}
+
+[class*="st-key-pf_index_bar"] [data-testid="stButton"] button[kind="secondary"] {
+  background: var(--portfolio-surface) !important;
+  border: 1px solid var(--portfolio-border) !important;
+  color: var(--portfolio-muted) !important;
+}
+
+[class*="st-key-pf_index_bar"] [data-testid="stButton"] button[kind="secondary"]:hover {
+  border-color: var(--portfolio-accent) !important;
+  color: var(--portfolio-foreground) !important;
+  background: var(--portfolio-surface-raised) !important;
+}
+
+[class*="st-key-pf_index_bar"] [data-testid="stButton"] button[kind="primary"] {
+  background: var(--portfolio-surface-raised) !important;
+  border: 1px solid var(--portfolio-accent-strong) !important;
+  border-bottom: 2px solid var(--portfolio-accent-strong) !important;
+  color: var(--portfolio-foreground) !important;
+}
+
+/* Tool Chips */
+.pf-chips-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0.85rem 0 1.1rem;
+}
+
+.pf-chip {
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border: 1px solid var(--portfolio-border);
+  color: var(--portfolio-muted);
+  background: var(--portfolio-surface);
+  border-radius: 0;
+  line-height: 1.4;
+  transition: border-color 160ms ease-out, color 160ms ease-out;
+}
+
+.pf-chip:hover {
   border-color: var(--portfolio-accent-strong);
-  background: var(--portfolio-accent-deep);
+  color: var(--portfolio-foreground);
 }
-.st-key-work_detail [data-testid="stMarkdownContainer"] { max-width: 75ch; }
-.st-key-work_gallery [data-testid="stCaptionContainer"] { color: var(--portfolio-foreground); }
-@media (max-width: 640px) {
-  [class*="st-key-work_card_"] h4 { min-height: 0; }
-  [class*="st-key-work_thumbnail_"] img { height: 150px; }
+
+/* Preview Viewport Frame — Properly scaled, contained, non-dominating */
+[class*="st-key-pf_preview_frame"] {
+  border: 1px solid var(--portfolio-border) !important;
+  background: #111 !important;
+  max-height: 290px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.6rem !important;
+  border-radius: 0 !important;
+}
+
+[class*="st-key-pf_preview_frame"] img {
+  max-height: 275px !important;
+  width: auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  display: block !important;
+  margin: 0 auto !important;
+  transition: transform 240ms ease-out !important;
+}
+
+[class*="st-key-pf_preview_frame"]:hover img {
+  transform: scale(1.02) !important;
+}
+
+/* Enlarge button below preview */
+[class*="st-key-pf_enlarge_btn"] button {
+  min-height: 32px !important;
+  height: 32px !important;
+  font-size: 0.75rem !important;
+  margin-top: 0.5rem !important;
+  border-radius: 0 !important;
+}
+
+/* Deep-dive Tabs — Increased spacing and clean indicators */
+[data-testid="stTabs"] [role="tablist"],
+[data-testid="stTabs"] [data-baseweb="tab-list"] {
+  gap: 2.5rem !important;
+  border-bottom: 1px solid var(--portfolio-border) !important;
+  padding-bottom: 0 !important;
+  margin-top: 0.75rem !important;
+}
+
+[data-testid="stTabs"] [role="tab"],
+[data-testid="stTabs"] button[role="tab"],
+[data-testid="stTab"] {
+  padding: 0.75rem 0.25rem !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
+  color: var(--portfolio-muted) !important;
+  font-family: Geist, "JetBrainsMono Nerd Font", sans-serif !important;
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
+  transition: color 160ms ease-out, border-color 160ms ease-out !important;
+}
+
+[data-testid="stTabs"] [role="tab"]:hover,
+[data-testid="stTabs"] button[role="tab"]:hover,
+[data-testid="stTab"]:hover {
+  color: var(--portfolio-foreground) !important;
+  border-bottom-color: var(--portfolio-accent-deep) !important;
+}
+
+[data-testid="stTabs"] [role="tab"][aria-selected="true"],
+[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
+[data-testid="stTab"][aria-selected="true"] {
+  color: var(--portfolio-foreground) !important;
+  border-bottom-color: var(--portfolio-accent-strong) !important;
+  font-weight: 700 !important;
+}
+
+/* Portfolio Deep-dive Tab List Items (Contribution, Key Features, Outcome) */
+[class*="st-key-pf_portfolio_root"] [data-testid="stTabPanel"] li,
+[data-testid="stTabPanel"] [data-testid="stMarkdownContainer"] li {
+  font-size: 0.95rem !important;
+  line-height: 1.8 !important;
+  color: var(--portfolio-foreground) !important;
+  margin-bottom: 0.6rem !important;
+}
+
+[class*="st-key-pf_portfolio_root"] [data-testid="stTabPanel"] li::marker,
+[data-testid="stTabPanel"] [data-testid="stMarkdownContainer"] li::marker {
+  color: var(--portfolio-accent) !important;
+}
+
+/* Strict Red Muted Accent on Inline Code Spans — Overrides default green */
+:not(pre) > code,
+[data-testid="stMarkdownContainer"] :not(pre) > code {
+  color: var(--portfolio-accent-strong) !important;
+  background: var(--portfolio-surface-raised) !important;
+  border: 1px solid var(--portfolio-border) !important;
+  border-radius: 0 !important;
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 0.88em !important;
+  padding: 0.12em 0.4em !important;
+}
+
+/* Code Blocks (st.code, including language-text in Autobiography) */
+[data-testid="stCode"],
+[data-testid="stCode"] pre,
+[data-testid="stCode"] code,
+[data-testid="stCode"] code[class*="language-"] {
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 0.95rem !important; /* matches p font-size */
+  line-height: 1.6 !important;
+}
+
+/* Clean Unordered Lists with Muted Red Square Markers */
+[data-testid="stMarkdownContainer"] ul {
+  list-style-type: square !important;
+  padding-left: 1.35rem !important;
+  margin: 0.6rem 0 !important;
+}
+
+[data-testid="stMarkdownContainer"] li {
+  color: var(--portfolio-foreground) !important;
+  line-height: 1.75 !important;
+  margin-bottom: 0.45rem !important;
+}
+
+[data-testid="stMarkdownContainer"] li::marker {
+  color: var(--portfolio-accent) !important;
 }
 
 ::selection {
@@ -238,6 +612,7 @@ textarea:focus-visible,
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

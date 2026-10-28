@@ -54,8 +54,9 @@ class ContentTests(unittest.TestCase):
 
     def test_parse_portfolio_projects_preserves_the_five_known_sections(self) -> None:
         markdown = Path("contents/my-portfolio.md").read_text(encoding="utf-8")
+        asset_dir = Path("assets")
 
-        projects = parse_portfolio_projects(markdown)
+        projects = parse_portfolio_projects(markdown, asset_dir)
 
         self.assertEqual(
             list(projects),
@@ -68,3 +69,21 @@ class ContentTests(unittest.TestCase):
             ],
         )
         self.assertIn("Solo developer", projects["DeskDuck"].body)
+
+    def test_parse_portfolio_projects_slug_is_url_safe(self) -> None:
+        markdown = Path("contents/my-portfolio.md").read_text(encoding="utf-8")
+        asset_dir = Path("assets")
+
+        projects = parse_portfolio_projects(markdown, asset_dir)
+
+        for title, p in projects.items():
+            self.assertRegex(p.slug, r"^[a-z0-9_]+$", msg=f"Slug not URL-safe for '{title}'")
+
+    def test_parse_portfolio_projects_body_has_no_raw_image_lines(self) -> None:
+        markdown = Path("contents/my-portfolio.md").read_text(encoding="utf-8")
+        asset_dir = Path("assets")
+
+        projects = parse_portfolio_projects(markdown, asset_dir)
+
+        for title, p in projects.items():
+            self.assertNotIn("![", p.body, msg=f"Image markdown not stripped for '{title}'")

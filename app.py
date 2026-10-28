@@ -20,15 +20,28 @@ st.set_page_config(
     page_icon="👋",
     layout="wide",
 )
+
+# # Custom CSS to change the sidebar width
+# st.markdown(
+#     """
+#     <style>
+#     [data-testid="stSidebar"] {
+#         min-width: 350px;
+#         max-width: 500px;
+#     }
+#     </style>
+#     """,
+#     unsafe_allow_html=True,
+# )
+
 apply_visual_system(ROOT / "assets" / "styles" / "app.css")
 
-st.title("Arth Andrey C. Endrina")
-st.caption("Bachelor of Science in Computer Science · 3rd Year")
-
 with st.sidebar:
-    st.header("Explore")
+    st.title("Arth Andrey C. Endrina")
+    st.caption("Computer Science · 3rd Year · CIT-U")
+    st.divider()
     page = st.radio(
-        "Portfolio sections",
+        "Navigation",
         ["About", "Autobiography", "Skills", "Portfolio", "Feedback"],
         label_visibility="collapsed",
     )
