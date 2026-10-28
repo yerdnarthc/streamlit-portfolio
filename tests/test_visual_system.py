@@ -94,3 +94,16 @@ class VisualSystemTests(unittest.TestCase):
             '.st-key-about_photo_frame [data-testid="stImage"]',
             script,
         )
+
+    def test_feedback_success_has_a_dedicated_delight_sequence(self) -> None:
+        component = Path("components/feedback.py").read_text(encoding="utf-8")
+        script = Path("ui/motion/motion.js").read_text(encoding="utf-8")
+        motion_css = Path("ui/motion/motion.css").read_text(encoding="utf-8")
+
+        self.assertIn('key="feedback_success"', component)
+        self.assertIn('key="feedback_error"', component)
+        self.assertIn('selector: ".st-key-feedback_success"', script)
+        self.assertIn('motion: "feedback-success"', script)
+        self.assertIn("@keyframes feedback-signal-trace", motion_css)
+        self.assertIn("@keyframes feedback-submit-release", motion_css)
+        self.assertIn("prefers-reduced-motion: reduce", motion_css)

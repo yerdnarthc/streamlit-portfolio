@@ -105,8 +105,12 @@ and image parallax. Dialogs settle from a small scale and offset.
 
 ### Feedback
 
-The heading and form enter as two calm beats. A newly created success or error
-alert receives short feedback motion after the form rerun.
+The heading and form enter as two calm beats. Validation errors use a short,
+restrained directional response. A successful submission becomes the authored
+"signal received" moment: the button releases, the receipt panel settles, an
+accent trace resolves across its edge, and the native confirmation icon and
+message follow. Reduced motion preserves the acknowledgment through a brief
+border-and-opacity change without spatial movement.
 
 ## Lifecycle and Selector Contract
 

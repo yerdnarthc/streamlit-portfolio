@@ -1,5 +1,5 @@
 const ENGINE_KEY = "__arthPortfolioMotionEngine";
-const ENGINE_VERSION = "1.0.1";
+const ENGINE_VERSION = "1.0.2";
 const ROOT_SELECTOR = '[data-testid="stAppViewContainer"]';
 const PAGE_ROOTS = [
   ["about", ".st-key-about_page"],
@@ -120,8 +120,13 @@ const REVEAL_GROUPS = [
     delay: 80,
   },
   {
-    selector: ".st-key-feedback_response [data-testid=\"stAlert\"]",
-    motion: "feedback",
+    selector: ".st-key-feedback_error [data-testid=\"stAlert\"]",
+    motion: "feedback-error",
+    replay: true,
+  },
+  {
+    selector: ".st-key-feedback_success",
+    motion: "feedback-success",
     replay: true,
   },
   {

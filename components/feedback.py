@@ -44,7 +44,9 @@ def _render_feedback_content() -> None:
 
     with st.container(key="feedback_response"):
         if error_message:
-            st.error(error_message)
+            with st.container(key="feedback_error"):
+                st.error(error_message)
         confirmation = st.session_state.get("feedback_confirmation")
         if confirmation:
-            st.success(confirmation)
+            with st.container(key="feedback_success"):
+                st.success(confirmation)
