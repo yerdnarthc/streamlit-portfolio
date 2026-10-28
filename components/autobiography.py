@@ -55,13 +55,12 @@ def render_autobiography(content_dir: Path) -> None:
                     key="autobiography_closing_code",
                     label_visibility="collapsed",
                 )
-                _, run_column = st.columns([15, 1])
-                with run_column:
+                with st.container(horizontal_alignment="right"):
                     run_code = st.button(
                         "Run",
                         icon=":material/play_arrow:",
                         key="run_autobiography_code",
-                        width="stretch",
+                        width="content",
                     )
 
             if run_code:
