@@ -4,6 +4,7 @@ import unittest
 
 from utils.autobiography import build_autobiography_pdf, run_print_statement
 from utils.content import load_markdown, parse_skills_markdown, remove_image_markdown
+from components.portfolio import parse_portfolio_projects
 
 
 class ContentTests(unittest.TestCase):
@@ -50,3 +51,20 @@ class ContentTests(unittest.TestCase):
 
         self.assertTrue(pdf.startswith(b"%PDF"))
         self.assertIn(b"/Helvetica", pdf)
+
+    def test_parse_portfolio_projects_preserves_the_five_known_sections(self) -> None:
+        markdown = Path("contents/my-portfolio.md").read_text(encoding="utf-8")
+
+        projects = parse_portfolio_projects(markdown)
+
+        self.assertEqual(
+            list(projects),
+            [
+                "DeskDuck",
+                "Custom Neofetch-Style Github Profile",
+                "N-Queens Hill Climbing Visualizer",
+                "BantAI Buddy Extension",
+                "VWSim: Vacuum World Agent Simulator",
+            ],
+        )
+        self.assertIn("Solo developer", projects["DeskDuck"].body)

@@ -94,6 +94,7 @@ h3,
 }
 
 [data-testid="stButton"] > button,
+[data-testid="stLinkButton"] > a,
 [data-testid="stDownloadButton"] > button {
   background: var(--portfolio-accent-deep);
   border: 1px solid var(--portfolio-accent-strong);
@@ -106,6 +107,7 @@ h3,
 }
 
 [data-testid="stButton"] > button:hover,
+[data-testid="stLinkButton"] > a:hover,
 [data-testid="stDownloadButton"] > button:hover {
   background: var(--portfolio-accent);
   border-color: var(--portfolio-accent-strong);
@@ -139,6 +141,48 @@ textarea:focus-visible,
 [role="tab"]:focus-visible {
   outline: 1px solid var(--portfolio-accent-strong);
   outline-offset: 3px;
+}
+
+[class*="st-key-portfolio_dossier_"] {
+  background: var(--portfolio-surface);
+  border-color: var(--portfolio-border);
+  border-radius: 0 !important;
+  padding: 0.6rem;
+}
+
+[class*="st-key-portfolio_dossier_"] [data-testid="stCaptionContainer"] {
+  color: var(--portfolio-accent-strong);
+  line-height: 1.5;
+}
+
+[class*="st-key-portfolio_media_frame_"] {
+  background: var(--portfolio-surface-raised);
+  border-color: var(--portfolio-border);
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+
+[class*="st-key-portfolio_media_frame_"] img {
+  border-radius: 0 !important;
+  transition: transform 220ms ease-out;
+}
+
+[class*="st-key-portfolio_media_frame_"]:hover {
+  border-color: var(--portfolio-accent-strong);
+}
+
+[class*="st-key-portfolio_media_frame_"]:hover img {
+  transform: scale(1.015);
+}
+
+[class*="st-key-portfolio_"] [data-testid="stRadio"] label {
+  border: 1px solid transparent;
+  padding: 0.2rem 0.35rem;
+}
+
+[class*="st-key-portfolio_"] [data-testid="stRadio"] label:has(input:checked) {
+  background: var(--portfolio-accent-deep);
+  border-color: var(--portfolio-accent-strong);
 }
 
 ::selection {

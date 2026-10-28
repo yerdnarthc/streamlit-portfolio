@@ -6,6 +6,7 @@ import streamlit as st
 
 from components.about import render_about
 from components.autobiography import render_autobiography
+from components.portfolio import render_portfolio
 from components.skills import render_skills
 from components.ui import apply_visual_system
 
@@ -38,5 +39,7 @@ elif page == "Autobiography":
     render_autobiography(CONTENT_DIR)
 elif page == "Skills":
     render_skills(CONTENT_DIR)
+elif page == "Portfolio":
+    render_portfolio(CONTENT_DIR, ASSET_DIR)
 else:
     st.info(f"The {page} section will be added in the next implementation tasks.")
