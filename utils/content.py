@@ -24,6 +24,24 @@ def remove_image_markdown(markdown: str) -> str:
     ).strip()
 
 
+def parse_markdown_sections(markdown: str) -> tuple[str, dict[str, str]]:
+    """Return a document title and its second-level Markdown sections."""
+    title_match = re.search(r"^#\s+(.+?)\s*$", markdown, flags=re.MULTILINE)
+    title = title_match.group(1).strip() if title_match else ""
+    headings = list(re.finditer(r"^##\s+(.+?)\s*$", markdown, flags=re.MULTILINE))
+    sections: dict[str, str] = {}
+
+    for index, heading in enumerate(headings):
+        content_end = (
+            headings[index + 1].start()
+            if index + 1 < len(headings)
+            else len(markdown)
+        )
+        sections[heading.group(1).strip()] = markdown[heading.end() : content_end].strip()
+
+    return title, sections
+
+
 def parse_skills_markdown(markdown: str) -> pd.DataFrame:
     """Parse valid skill rows from the student's three-column Markdown table."""
     rows: list[dict[str, object]] = []

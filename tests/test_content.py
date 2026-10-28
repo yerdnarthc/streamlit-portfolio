@@ -7,7 +7,12 @@ from utils.autobiography import (
     run_print_statement,
     structure_autobiography,
 )
-from utils.content import load_markdown, parse_skills_markdown, remove_image_markdown
+from utils.content import (
+    load_markdown,
+    parse_markdown_sections,
+    parse_skills_markdown,
+    remove_image_markdown,
+)
 from components.portfolio import parse_portfolio_projects
 
 
@@ -88,6 +93,25 @@ class ContentTests(unittest.TestCase):
         text = "Intro\n![Preview](../assets/preview.png)\nOutro"
 
         self.assertEqual(remove_image_markdown(text), "Intro\nOutro")
+
+    def test_parse_markdown_sections_preserves_profile_content(self) -> None:
+        markdown = (
+            "# About Me\n\n"
+            "## Name\n\nArth Andrey C. Endrina\n\n"
+            "## Program\n\nBachelor of Science in Computer Science\n\n"
+            "## Short Biography\n\nA biography with **original emphasis**."
+        )
+
+        title, sections = parse_markdown_sections(markdown)
+
+        self.assertEqual(title, "About Me")
+        self.assertEqual(sections["Name"], "Arth Andrey C. Endrina")
+        self.assertEqual(
+            sections["Program"], "Bachelor of Science in Computer Science"
+        )
+        self.assertEqual(
+            sections["Short Biography"], "A biography with **original emphasis**."
+        )
 
     def test_parse_skills_markdown_reads_valid_rows_only(self) -> None:
         markdown = (

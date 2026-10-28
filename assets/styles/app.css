@@ -323,73 +323,199 @@ textarea:focus-visible,
    ABOUT SECTION
    ══════════════════════════════════════════════════════════════════════════════ */
 
-.about-lead-bio {
+.st-key-about_page {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+.st-key-about_hero {
+  padding: 0.5rem 0 3.25rem;
+  border-bottom: 1px solid var(--portfolio-accent-deep);
+}
+
+.st-key-about_identity h2 {
+  max-width: 12ch;
+  margin: 0 0 clamp(2.5rem, 6vw, 5rem) !important;
+  color: var(--portfolio-muted-white) !important;
   font-family: Geist, sans-serif !important;
-  font-size: 1.05rem !important;
-  line-height: 1.8 !important;
+  font-size: clamp(3.25rem, 6.6vw, 5.75rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.05em !important;
+  line-height: 0.94 !important;
+  text-wrap: balance;
+}
+
+[class*="st-key-about_fact_"] {
+  max-width: 46rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--portfolio-border);
+}
+
+[class*="st-key-about_fact_"] > [data-testid="stVerticalBlock"] {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.32fr) 1fr;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.st-key-about_fact_year {
+  border-bottom: 1px solid var(--portfolio-border);
+}
+
+[class*="st-key-about_fact_"] [data-testid="stCaptionContainer"] {
+  margin: 0 !important;
+  color: var(--portfolio-accent-strong) !important;
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", monospace !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  line-height: 1.5 !important;
+  text-transform: uppercase;
+}
+
+[class*="st-key-about_fact_"] [data-testid="stMarkdownContainer"] p {
+  margin: 0 !important;
   color: var(--portfolio-foreground) !important;
-  margin-top: 0.25rem !important;
-  margin-bottom: 1.75rem !important;
-  max-width: 68ch !important;
-}
-
-.about-spec-grid {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  gap: 0.65rem !important;
-  border-top: 1px solid var(--portfolio-border) !important;
-  padding-top: 1.25rem !important;
-  margin-top: 1.5rem !important;
-  max-width: 68ch !important;
-}
-
-.about-spec-item {
-  display: flex !important;
-  align-items: baseline !important;
-  justify-content: space-between !important;
-  border-bottom: 1px solid rgba(66, 56, 56, 0.45) !important;
-  padding-bottom: 0.55rem !important;
-}
-
-.about-spec-label {
-  font-family: "JetBrains Mono", monospace !important;
-  font-size: 0.72rem !important;
-  letter-spacing: 0.06em !important;
-  text-transform: uppercase !important;
-  color: var(--portfolio-muted) !important;
-}
-
-.about-spec-value {
-  font-family: Geist, "JetBrainsMono Nerd Font", sans-serif !important;
-  font-size: 0.92rem !important;
+  font-family: Geist, sans-serif !important;
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem) !important;
   font-weight: 600 !important;
-  color: var(--portfolio-foreground) !important;
-  text-align: right !important;
+  line-height: 1.45 !important;
 }
 
-[class*="st-key-about_photo_frame"] {
-  border: 1px solid var(--portfolio-border) !important;
-  background: var(--portfolio-surface) !important;
-  padding: 0.5rem !important;
+.st-key-about_photo_frame {
+  position: relative;
+  width: 100%;
+  max-width: 390px;
+  margin: 0 0 0 auto;
+  padding: 0.55rem;
+  overflow: hidden;
+  border: 1px solid var(--portfolio-border);
+  border-left: 2px solid var(--portfolio-accent-strong);
   border-radius: 0 !important;
-  max-width: 320px !important;
-  margin: 0 auto !important;
+  background: var(--portfolio-surface);
 }
 
-[class*="st-key-about_photo_frame"] img {
-  border-radius: 0 !important;
+.st-key-about_photo_frame::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 34%;
+  height: 2px;
+  background: var(--portfolio-accent-strong);
+  content: "";
+}
+
+.st-key-about_photo_frame img {
   display: block !important;
   width: 100% !important;
-  height: auto !important;
+  aspect-ratio: 1 / 1;
+  border-radius: 0 !important;
   object-fit: cover !important;
 }
 
-[class*="st-key-about_photo_frame"] [data-testid="stCaptionContainer"] {
-  font-family: "JetBrains Mono", monospace !important;
-  font-size: 0.74rem !important;
-  text-align: center !important;
-  margin-top: 0.5rem !important;
-  color: var(--portfolio-muted) !important;
+.st-key-about_biography {
+  margin-top: 3rem;
+  padding: 3rem 0 3.5rem;
+  border-top: 1px solid var(--portfolio-border);
+  border-bottom: 1px solid var(--portfolio-border);
+}
+
+.st-key-about_biography [data-testid="stColumn"]:first-child [data-testid="stText"] {
+  margin: 0 !important;
+  color: var(--portfolio-accent-strong) !important;
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", monospace !important;
+  font-size: clamp(2.65rem, 5vw, 4.75rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.045em !important;
+  line-height: 0.9 !important;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.st-key-about_biography [data-testid="stColumn"]:first-child [data-testid="stText"] * {
+  color: inherit !important;
+  font: inherit !important;
+  letter-spacing: inherit !important;
+  line-height: inherit !important;
+}
+
+.st-key-about_biography h3 {
+  max-width: 18ch;
+  margin: -0.25rem 0 1.1rem !important;
+  color: var(--portfolio-muted-white) !important;
+  font-family: Geist, sans-serif !important;
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.1 !important;
+}
+
+.st-key-about_biography [data-testid="stColumn"]:last-child [data-testid="stMarkdownContainer"] p {
+  max-width: 72ch;
+  margin: 0 !important;
+  color: var(--portfolio-foreground) !important;
+  font-size: 1.02rem !important;
+  line-height: 1.85 !important;
+}
+
+.st-key-about_biography [data-testid="stColumn"]:last-child [data-testid="stMarkdownContainer"] p::first-letter {
+  float: left;
+  margin: 0.08em 0.14em 0 0;
+  color: var(--portfolio-accent-strong);
+  font-family: Geist, sans-serif;
+  font-size: 4.2rem;
+  font-weight: 700;
+  line-height: 0.75;
+}
+
+@media (max-width: 640px) {
+  .st-key-about_hero {
+    padding-bottom: 2rem;
+  }
+
+  .st-key-about_identity h2 {
+    max-width: 100%;
+    margin-bottom: 2rem !important;
+    font-size: clamp(2.65rem, 14vw, 4rem) !important;
+  }
+
+  [class*="st-key-about_fact_"] {
+    padding: 0.75rem 0;
+  }
+
+  [class*="st-key-about_fact_"] > [data-testid="stVerticalBlock"] {
+    grid-template-columns: 6rem 1fr;
+  }
+
+  .st-key-about_photo_frame {
+    max-width: 430px;
+    margin: 1rem auto 0;
+  }
+
+  .st-key-about_biography {
+    margin-top: 2rem;
+    padding: 2rem 0 2.5rem;
+  }
+
+  .st-key-about_biography [data-testid="stColumn"]:first-child [data-testid="stText"] {
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--portfolio-accent-deep);
+    font-size: 2.25rem !important;
+    line-height: 1 !important;
+    writing-mode: horizontal-tb;
+  }
+
+  .st-key-about_biography h3 {
+    margin-top: 0 !important;
+    font-size: 1.75rem !important;
+  }
+
+  .st-key-about_biography [data-testid="stColumn"]:last-child [data-testid="stMarkdownContainer"] p {
+    max-width: 100%;
+    font-size: 0.96rem !important;
+    line-height: 1.75 !important;
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════

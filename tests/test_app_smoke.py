@@ -119,7 +119,17 @@ class AppSmokeTests(unittest.TestCase):
 
         self.assertFalse(app.exception)
         self.assertTrue(any("Arth Andrey" in title.value for title in app.title))
-        self.assertTrue(any("About" in header.value for header in app.header))
+        self.assertTrue(
+            any("Arth Andrey C. Endrina" == header.value for header in app.header)
+        )
+        self.assertTrue(
+            any("Short Biography" == heading.value for heading in app.subheader)
+        )
+        rendered_markdown = "\n".join(item.value for item in app.markdown)
+        self.assertIn("Bachelor of Science in Computer Science", rendered_markdown)
+        self.assertIn("3rd Year", rendered_markdown)
+        self.assertIn("passionate about building practical software", rendered_markdown)
+        self.assertEqual(len(app.image), 1)
 
     def test_skills_page_shows_data_and_chart(self) -> None:
         app = AppTest.from_file(Path(__file__).parents[1] / "app.py")
