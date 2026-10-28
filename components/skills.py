@@ -126,7 +126,7 @@ def _skills_theater(frame) -> None:
             st.dataframe(
                 filtered_frame[table_columns],
                 column_config={
-                    "Skill": st.column_config.TextColumn("Skill", width="medium"),
+                    "Skill": st.column_config.TextColumn("Skill", width=320),
                     "Rating": st.column_config.NumberColumn(
                         "Rating", width="small", alignment="left", format="%d"
                     ),
