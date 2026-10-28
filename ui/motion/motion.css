@@ -1,7 +1,7 @@
 :root {
   --motion-duration-fast: 120ms;
-  --motion-duration-medium: 320ms;
-  --motion-duration-slow: 560ms;
+  --motion-duration-medium: 420ms;
+  --motion-duration-slow: 720ms;
   --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --motion-ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
   --motion-reveal-distance: 18px;
@@ -44,7 +44,7 @@ html.portfolio-motion-ready [data-motion="page-title"][data-motion-state="pendin
 }
 
 html.portfolio-motion-ready [data-motion="page-title"] {
-  transition-duration: 480ms;
+  transition-duration: 600ms;
 }
 
 html.portfolio-motion-ready [data-motion="shell"][data-motion-state="pending"] {
@@ -63,7 +63,7 @@ html.portfolio-motion-ready [data-motion="image-mask"][data-motion-state="pendin
 }
 
 html.portfolio-motion-ready [data-motion="image-mask"] {
-  transition-duration: 680ms;
+  transition-duration: 820ms;
 }
 
 html.portfolio-motion-ready [data-motion="editorial"][data-motion-state="pending"] {
@@ -94,7 +94,7 @@ html.portfolio-motion-ready [data-motion="project-stage"][data-motion-state="pen
 }
 
 html.portfolio-motion-ready [data-motion="project-stage"] {
-  transition-duration: 440ms;
+  transition-duration: 560ms;
 }
 
 html.portfolio-motion-ready [data-motion="dialog"][data-motion-state="pending"] {
@@ -103,7 +103,7 @@ html.portfolio-motion-ready [data-motion="dialog"][data-motion-state="pending"] 
 
 html.portfolio-motion-ready [data-motion="dialog"] {
   transform-origin: 50% 42%;
-  transition-duration: 380ms;
+  transition-duration: 420ms;
 }
 
 .st-key-autobiography_timeline::after {
@@ -132,6 +132,12 @@ html.portfolio-motion-ready [data-motion="dialog"] {
   transform-style: preserve-3d;
   transition: transform 420ms var(--motion-ease-emphasized),
     border-color var(--motion-duration-fast) ease-out !important;
+}
+
+html.portfolio-motion-ready
+  .motion-tilt-target[data-motion-state="revealed"] {
+  transform: perspective(950px) rotateX(var(--motion-tilt-x))
+    rotateY(var(--motion-tilt-y)) translate3d(0, 0, 0);
 }
 
 .motion-tilt-target.motion-interacting {

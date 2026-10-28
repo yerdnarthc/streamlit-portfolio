@@ -58,13 +58,13 @@ tested Custom Components v2 lifecycle and its rendered DOM contract.
 | Token | Value | Use |
 | --- | ---: | --- |
 | `duration-fast` | 120 ms | hover, press, selected state |
-| `duration-medium` | 320 ms | controls, panels, metrics |
-| `duration-slow` | 560 ms | hero and image reveals |
+| `duration-medium` | 420 ms | controls, panels, metrics |
+| `duration-slow` | 720 ms | hero and image reveals |
 | `easing-standard` | `cubic-bezier(0.2, 0, 0, 1)` | direct interaction |
 | `easing-emphasized` | `cubic-bezier(0.16, 1, 0.3, 1)` | entrances and settling |
 | `reveal-distance` | 18 px | default spatial cue |
-| `stagger-small` | 38–48 ms | navigation and chapters |
-| `stagger-medium` | 55–70 ms | facts, metrics, panels |
+| `stagger-small` | 50–62 ms | navigation and chapters |
+| `stagger-medium` | 72–88 ms | facts, metrics, panels |
 | `pointer-tilt` | 1–2 degrees | desktop portrait and project media |
 | `media-parallax` | 3–4 px | desktop image response |
 
@@ -79,9 +79,9 @@ indicator. Route reruns do not intentionally replay the shell.
 ### About
 
 The name uses the primary clipped heading reveal. Program and year follow as a
-short stagger. The portrait reveals through a vertical mask and gains shallow
-pointer depth on fine-pointer devices. The biography uses a quieter editorial
-entrance.
+short stagger. The portrait's stable outer frame performs an eager vertical-mask
+reveal, avoiding image-load and rerun races, then gains shallow pointer depth on
+fine-pointer devices. The biography uses a quieter editorial entrance.
 
 ### Autobiography
 

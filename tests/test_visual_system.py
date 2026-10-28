@@ -81,4 +81,16 @@ class VisualSystemTests(unittest.TestCase):
 
         self.assertIn("html.portfolio-motion-ready", motion_css)
         self.assertIn("prefers-reduced-motion: reduce", motion_css)
+        self.assertIn("--motion-duration-medium: 420ms", motion_css)
+        self.assertIn("--motion-duration-slow: 720ms", motion_css)
         self.assertNotIn("transition: all", app_css + motion_css)
+
+    def test_about_portrait_reveal_uses_the_stable_frame(self) -> None:
+        script = Path("ui/motion/motion.js").read_text(encoding="utf-8")
+
+        self.assertIn('selector: ".st-key-about_photo_frame"', script)
+        self.assertIn("eager: true", script)
+        self.assertNotIn(
+            '.st-key-about_photo_frame [data-testid="stImage"]',
+            script,
+        )

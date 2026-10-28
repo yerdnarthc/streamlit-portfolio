@@ -1,5 +1,5 @@
 const ENGINE_KEY = "__arthPortfolioMotionEngine";
-const ENGINE_VERSION = "1.0.0";
+const ENGINE_VERSION = "1.0.1";
 const ROOT_SELECTOR = '[data-testid="stAppViewContainer"]';
 const PAGE_ROOTS = [
   ["about", ".st-key-about_page"],
@@ -25,8 +25,8 @@ const REVEAL_GROUPS = [
     selector: ".st-key-primary_navigation label",
     motion: "nav-item",
     initialOnly: true,
-    delay: 70,
-    stagger: 38,
+    delay: 90,
+    stagger: 50,
   },
   {
     selector: ".st-key-about_identity h2",
@@ -35,13 +35,14 @@ const REVEAL_GROUPS = [
   {
     selector: '[class*="st-key-about_fact_"]',
     motion: "line-item",
-    delay: 90,
-    stagger: 62,
+    delay: 120,
+    stagger: 78,
   },
   {
-    selector: '.st-key-about_photo_frame [data-testid="stImage"]',
+    selector: ".st-key-about_photo_frame",
     motion: "image-mask",
-    delay: 110,
+    delay: 160,
+    eager: true,
   },
   {
     selector: ".st-key-about_biography",
@@ -54,18 +55,18 @@ const REVEAL_GROUPS = [
   {
     selector: ".st-key-autobiography_preface",
     motion: "editorial",
-    delay: 55,
+    delay: 80,
   },
   {
     selector: '[class*="st-key-autobio_chapter_"]',
     motion: "chapter",
-    stagger: 48,
+    stagger: 62,
     alternate: true,
   },
   {
     selector: ".st-key-autobiography_code_panel, .st-key-autobiography_download",
     motion: "panel",
-    stagger: 55,
+    stagger: 72,
   },
   {
     selector: ".st-key-skills_page h2",
@@ -74,17 +75,17 @@ const REVEAL_GROUPS = [
   {
     selector: ".st-key-skills_controls",
     motion: "control-group",
-    delay: 45,
+    delay: 65,
   },
   {
     selector: ".st-key-skills_metrics [data-testid=\"stMetric\"]",
     motion: "metric",
-    stagger: 65,
+    stagger: 82,
   },
   {
     selector: ".st-key-skills_chart, .st-key-skills_table",
     motion: "panel",
-    stagger: 70,
+    stagger: 88,
   },
   {
     selector: ".st-key-portfolio_page h2",
@@ -97,7 +98,7 @@ const REVEAL_GROUPS = [
   {
     selector: ".st-key-pf_index_bar, .st-key-pf_browse_toolbar",
     motion: "control-group",
-    stagger: 55,
+    stagger: 72,
   },
   {
     selector: '[class*="st-key-pf_project_stage_"]',
@@ -116,7 +117,7 @@ const REVEAL_GROUPS = [
   {
     selector: ".st-key-feedback_form_shell",
     motion: "panel",
-    delay: 55,
+    delay: 80,
   },
   {
     selector: ".st-key-feedback_response [data-testid=\"stAlert\"]",
@@ -229,6 +230,13 @@ function createMotionEngine() {
     }
 
     element.dataset.motionState = "pending";
+    if (group.eager) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => reveal(element));
+      });
+      return;
+    }
+
     intersectionObserver.observe(element);
   };
 
