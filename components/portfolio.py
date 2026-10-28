@@ -53,7 +53,9 @@ def parse_portfolio_projects(markdown: str) -> dict[str, PortfolioProject]:
             continue
 
         section_end = headings[index + 1].start() if index + 1 < len(headings) else len(markdown)
-        body = remove_image_markdown(markdown[heading.start() : section_end]).strip()
+        section = markdown[heading.start() : section_end]
+        section = re.split(r"(?m)^# (?!#)", section)[0]
+        body = remove_image_markdown(section).strip()
         projects[title] = PortfolioProject(
             title=title,
             body=body,
@@ -64,7 +66,7 @@ def parse_portfolio_projects(markdown: str) -> dict[str, PortfolioProject]:
 
 
 def _metadata_value(body: str, label: str) -> str | None:
-    pattern = re.compile(rf"^\*\*{re.escape(label)}\*\*:\s*(.+)$", re.MULTILINE)
+    pattern = re.compile(rf"^\*\*{re.escape(label)}(?:\*\*:\s*|:\*\*\s*|:\s*)(.+)$", re.MULTILINE)
     match = pattern.search(body)
     return match.group(1).strip() if match else None
 
@@ -88,103 +90,109 @@ def _project_key(title: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", title.lower()).strip("_")
 
 
-def _render_dossier(project: PortfolioProject, asset_dir: Path) -> None:
-    """Render one selected project without altering its prepared writing."""
-    key = _project_key(project.title)
-    status = _metadata_value(project.body, "Status")
-    role = _metadata_value(project.body, "Role")
-    repository = _metadata_link(project.body, "Repository")
-    live_demo = _metadata_link(project.body, "Live demo")
-    preview_path = asset_dir / project.preview_relative_path
 
-    with st.container(border=True, key=f"portfolio_dossier_{key}"):
-        details_column, media_column = st.columns([1, 1.6], gap="large")
-        with details_column:
-            st.subheader(project.title)
-            identity = "  |  ".join(
-                item
-                for item in (
-                    f"Status: {status}" if status else None,
-                    f"Role: {role}" if role else None,
-                )
-                if item
-            )
-            if identity:
-                st.caption(identity)
-
-            if repository or live_demo:
-                actions = st.columns(2 if repository and live_demo else 1)
-                if repository:
-                    with actions[0]:
-                        st.link_button(
-                            "Repository",
-                            repository,
-                            icon=":material/open_in_new:",
-                            key=f"portfolio_repository_{key}",
-                        )
-                if live_demo:
-                    with actions[-1]:
-                        st.link_button(
-                            "Live demo",
-                            live_demo,
-                            icon=":material/play_circle:",
-                            key=f"portfolio_demo_{key}",
-                        )
-
-        with media_column:
-            if preview_path.is_file():
-                with st.container(border=True, key=f"portfolio_media_frame_{key}"):
-                    st.image(
-                        str(preview_path),
-                        caption=f"{project.title} preview",
-                        width="stretch",
-                    )
-            else:
-                st.warning(f"Preview image for {project.title} could not be loaded.")
-
-        st.divider()
-        st.markdown(_project_details(project.body))
+def _sections(body: str) -> dict[str, str]:
+    parts = re.split(r"(?m)^### (.+)\s*$", _project_details(body))
+    return {parts[i].strip(): parts[i + 1].strip() for i in range(1, len(parts), 2)}
 
 
-def _render_project_group(
-    projects: dict[str, PortfolioProject],
-    titles: tuple[str, ...],
-    group_key: str,
-    asset_dir: Path,
-) -> None:
-    available_projects = [projects[title] for title in titles if title in projects]
-    for title in titles:
-        if title not in projects:
-            st.warning(f"Project content for {title} could not be loaded.")
+def _select_project(title: str) -> None:
+    st.session_state.portfolio_selected = title
 
-    if not available_projects:
+
+def _preview(project: PortfolioProject, asset_dir: Path) -> None:
+    path = asset_dir / project.preview_relative_path
+    if path.is_file():
+        st.image(str(path), width="stretch", alt=f"{project.title} application preview")
+    else:
+        st.caption(f"Preview unavailable for {project.title}.")
+
+
+@st.dialog("Project preview", width="large")
+def _enlarge_preview(project: PortfolioProject, asset_dir: Path) -> None:
+    st.subheader(project.title)
+    _preview(project, asset_dir)
+
+
+def _gallery(projects: list[PortfolioProject], asset_dir: Path, compact: bool = False) -> None:
+    if not projects:
         return
+    for column, project in zip(st.columns(len(projects), gap="medium"), projects):
+        with column:
+            key = _project_key(project.title)
+            active = st.session_state.portfolio_selected == project.title
+            with st.container(key=f"work_card_{key}", border=False):
+                if not compact:
+                    with st.container(key=f"work_thumbnail_{key}"):
+                        _preview(project, asset_dir)
+                st.markdown(f"#### {project.title}")
+                st.caption(_metadata_value(project.body, "Role") or "Role unavailable")
+                st.caption(_metadata_value(project.body, "Status") or "Status unavailable")
+                st.button(
+                    "Viewing project" if active else "Explore project",
+                    icon=":material/arrow_forward:",
+                    key=f"explore_{key}",
+                    type="primary" if active else "secondary",
+                    on_click=_select_project,
+                    args=(project.title,),
+                    width="stretch",
+                )
 
-    selected_title = st.radio(
-        f"Choose a {group_key} project",
-        [project.title for project in available_projects],
-        horizontal=True,
-        label_visibility="collapsed",
-        key=f"portfolio_{group_key}_index",
-    )
-    _render_dossier(projects[selected_title], asset_dir=asset_dir)
+
+@st.fragment
+def _portfolio_gallery(projects: dict[str, PortfolioProject], asset_dir: Path) -> None:
+    if st.session_state.get("portfolio_selected") not in projects:
+        st.session_state.portfolio_selected = next(iter(projects))
+    with st.container(key="work_gallery"):
+        _gallery([projects[t] for t in FEATURED_TITLES if t in projects], asset_dir)
+        st.divider()
+        project = projects[st.session_state.portfolio_selected]
+        with st.container(key="work_detail"):
+            st.subheader(project.title)
+            st.caption(" · ".join(filter(None, [
+                _metadata_value(project.body, "Role"),
+                _metadata_value(project.body, "Status"),
+            ])))
+            with st.container(horizontal=True):
+                for label in ("Repository", "Live demo"):
+                    url = _metadata_link(project.body, label)
+                    if url:
+                        st.link_button(label, url, icon=":material/open_in_new:")
+            sections = _sections(project.body)
+            overview_column, preview_column = st.columns([2, 1], gap="large")
+            with overview_column:
+                st.markdown(sections.get("Overview", ""))
+            with preview_column:
+                with st.container(key="work_detail_preview"):
+                    _preview(project, asset_dir)
+                if (asset_dir / project.preview_relative_path).is_file():
+                    st.button(
+                        "Enlarge preview", icon=":material/zoom_in:",
+                        on_click=_enlarge_preview, args=(project, asset_dir),
+                        key="work_enlarge",
+                    )
+            labels = [label for label in sections if label != "Overview"]
+            if labels:
+                for tab, label in zip(st.tabs(labels), labels):
+                    with tab:
+                        st.markdown(sections[label])
+        st.divider()
+        st.subheader("More projects")
+        _gallery([projects[t] for t in MORE_PROJECT_TITLES if t in projects], asset_dir, compact=True)
 
 
 def render_portfolio(content_dir: Path, asset_dir: Path) -> None:
-    """Render the supplied portfolio as two interactive project dossiers."""
+    """Present a compact gallery and an inline, selectable case study."""
     st.header("Portfolio")
     source = load_markdown(content_dir / "my-portfolio.md")
     if source is None:
         st.warning("Portfolio content could not be loaded.")
         return
-
     projects = parse_portfolio_projects(source)
     if not projects:
         st.warning("No project sections could be read from the portfolio content.")
         return
-
-    featured_tab, more_tab = st.tabs(["Featured Projects", "More Projects"])
-    with featured_tab:
-        _render_project_group(projects, FEATURED_TITLES, "featured", asset_dir)
-    with more_tab:
-        _render_project_group(projects, MORE_PROJECT_TITLES, "more", asset_dir)
+    for title in PROJECT_MEDIA:
+        if title not in projects:
+            st.warning(f"Project content for {title} could not be loaded.")
+    _portfolio_gallery(projects, asset_dir)

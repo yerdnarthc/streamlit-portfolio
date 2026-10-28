@@ -45,7 +45,7 @@ class AppSmokeTests(unittest.TestCase):
         app.sidebar.radio[0].set_value("Portfolio").run()
 
         self.assertFalse(app.exception)
-        self.assertEqual(len(app.tabs), 2)
+        self.assertEqual(len(app.tabs), 4)
         self.assertTrue(any("DeskDuck" in heading.value for heading in app.subheader))
         self.assertGreaterEqual(len(app.image), 1)
 
@@ -54,13 +54,12 @@ class AppSmokeTests(unittest.TestCase):
 
         app.run()
         app.sidebar.radio[0].set_value("Portfolio").run()
-        app.radio[0].set_value("N-Queens Hill Climbing Visualizer").run()
-        app.radio[1].set_value("VWSim: Vacuum World Agent Simulator").run()
+        app.button(key="explore_n_queens_hill_climbing_visualizer").click().run()
+
+        self.assertTrue(any("N-Queens Hill Climbing Visualizer" in item.value for item in app.subheader))
+        app.button(key="explore_vwsim_vacuum_world_agent_simulator").click().run()
 
         self.assertFalse(app.exception)
-        self.assertTrue(
-            any("N-Queens Hill Climbing Visualizer" in item.value for item in app.subheader)
-        )
         self.assertTrue(
             any("VWSim: Vacuum World Agent Simulator" in item.value for item in app.subheader)
         )
