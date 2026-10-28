@@ -415,9 +415,7 @@ textarea:focus-visible,
 }
 
 .st-key-about_biography {
-  margin-top: 3rem;
   padding: 3rem 0 3.5rem;
-  border-top: 1px solid var(--portfolio-border);
   border-bottom: 1px solid var(--portfolio-border);
 }
 
@@ -494,7 +492,6 @@ textarea:focus-visible,
   }
 
   .st-key-about_biography {
-    margin-top: 2rem;
     padding: 2rem 0 2.5rem;
   }
 
