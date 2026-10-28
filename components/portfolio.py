@@ -280,9 +280,11 @@ def _portfolio_theater(projects: dict[str, PortfolioProject], asset_dir: Path) -
     """Self-contained interactive theater fragment for instant project switching."""
     with st.container(key="pf_portfolio_root"):
         with st.container(key="pf_group_selector"):
+            counts = {name: sum(p.group == name for p in projects.values()) for name in GROUP_NAMES}
             group = st.segmented_control(
                 "Project group", GROUP_NAMES, default="Featured Projects",
                 required=True, key="portfolio_group", label_visibility="collapsed",
+                format_func=lambda name: f"{name} · {counts[name]}",
             )
         group_projects = {title: p for title, p in projects.items() if p.group == group}
         remembered = st.session_state.get("portfolio_group_selections", {})
@@ -295,6 +297,22 @@ def _portfolio_theater(projects: dict[str, PortfolioProject], asset_dir: Path) -
         st.session_state.portfolio_selected = selected
         active_project = group_projects[selected]
         _render_project_index(group_projects)
+        titles = list(group_projects)
+        position = titles.index(selected)
+        with st.container(key="pf_browse_toolbar", horizontal=True,
+                          horizontal_alignment="distribute", vertical_alignment="center"):
+            st.caption(f"Project {position + 1} of {len(titles)}")
+            with st.container(horizontal=True, width="content", gap="small"):
+                st.button(
+                    "Previous", icon=":material/arrow_back:", key="pf_previous",
+                    type="tertiary", disabled=position == 0,
+                    on_click=_select_project, args=(titles[max(0, position - 1)],),
+                )
+                st.button(
+                    "Next", icon=":material/arrow_forward:", icon_position="right",
+                    key="pf_next", type="tertiary", disabled=position == len(titles) - 1,
+                    on_click=_select_project, args=(titles[min(len(titles) - 1, position + 1)],),
+                )
         st.divider()
         _render_project_stage(active_project, asset_dir)
         _render_project_tabs(active_project)

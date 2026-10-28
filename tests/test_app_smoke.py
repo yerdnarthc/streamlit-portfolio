@@ -5,6 +5,23 @@ from streamlit.testing.v1 import AppTest
 
 
 class AppSmokeTests(unittest.TestCase):
+    def test_portfolio_previous_next_respect_group_boundaries(self):
+        app = AppTest.from_file(Path(__file__).parents[1] / 'app.py').run()
+        app.sidebar.radio[0].set_value('Portfolio').run()
+        self.assertTrue(app.button(key='pf_previous').disabled)
+        app.button(key='pf_next').click().run()
+        self.assertTrue(any('Custom Neofetch' in h.value for h in app.subheader))
+        app.button(key='pf_next').click().run()
+        self.assertTrue(app.button(key='pf_next').disabled)
+        app.segmented_control(key='portfolio_group').set_value('More Projects').run()
+        self.assertTrue(app.button(key='pf_previous').disabled)
+        app.button(key='pf_next').click().run()
+        self.assertTrue(any('VWSim' in h.value for h in app.subheader))
+        self.assertTrue(app.button(key='pf_next').disabled)
+        app.button(key='pf_previous').click().run()
+        self.assertTrue(any('BantAI Buddy' in h.value for h in app.subheader))
+        self.assertFalse(app.exception)
+
     def test_portfolio_empty_group_and_stale_selection_recover(self):
         def fixture_app():
             from pathlib import Path
