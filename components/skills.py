@@ -22,15 +22,20 @@ def render_skills(content_dir: Path) -> None:
     st.header("Skills")
     st.caption("These ratings are my current self-assessment on a scale of 1–10.")
 
-    rating_column, explanation_column, highlight_column = st.columns(3)
+    rating_column, highlight_column = st.columns([1, 2], gap="large")
     with rating_column:
         minimum_rating = st.slider(
             "Minimum skill rating", min_value=1, max_value=10, value=1
         )
-    with explanation_column:
-        show_explanations = st.checkbox("Show how I use each skill", value=True)
     with highlight_column:
         highlighted_skill = st.selectbox("Highlight a skill", frame["Skill"].tolist())
+        show_explanations = st.checkbox("Show how I use each skill", value=True)
+        if show_explanations:
+            explanation = frame.loc[
+                frame["Skill"] == highlighted_skill, "How I Use It"
+            ].iloc[0]
+            st.subheader(highlighted_skill)
+            st.write(explanation)
 
     filtered_frame = frame.loc[frame["Rating"] >= minimum_rating]
     if filtered_frame.empty:
@@ -44,17 +49,39 @@ def render_skills(content_dir: Path) -> None:
         st.metric("Average Skill Rating", f"{filtered_frame['Rating'].mean():.1f}/10")
 
     st.subheader("Ratings")
-    st.bar_chart(filtered_frame.set_index("Skill")["Rating"], color="#965a5a")
+    st.vega_lite_chart(
+        filtered_frame[["Skill", "Rating"]],
+        {
+            "height": 420,
+            "mark": {"type": "bar", "color": "#965a5a"},
+            "encoding": {
+                "x": {
+                    "field": "Skill",
+                    "type": "nominal",
+                    "sort": None,
+                    "axis": {
+                        "labelAngle": 0,
+                        "labelExpr": "split(datum.label, ' ')",
+                        "labelLimit": 0,
+                        "labelPadding": 10,
+                        "title": None,
+                    },
+                },
+                "y": {
+                    "field": "Rating",
+                    "type": "quantitative",
+                    "scale": {"domain": [0, 10]},
+                    "axis": {"title": "Self-assessed rating / 10", "tickMinStep": 1},
+                },
+                "tooltip": [{"field": "Skill"}, {"field": "Rating"}],
+            },
+            "config": {"font": "JetBrainsMono Nerd Font"},
+        },
+        width="stretch",
+    )
 
     st.subheader("Skills at a glance")
     table_columns = ["Skill", "Rating"]
     if show_explanations:
         table_columns.append("How I Use It")
     st.dataframe(filtered_frame[table_columns], hide_index=True, width="stretch")
-
-    if show_explanations:
-        explanation = frame.loc[
-            frame["Skill"] == highlighted_skill, "How I Use It"
-        ].iloc[0]
-        st.subheader(highlighted_skill)
-        st.write(explanation)
