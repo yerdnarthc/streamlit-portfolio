@@ -8,6 +8,17 @@ from components.portfolio import parse_portfolio_projects
 
 
 class ContentTests(unittest.TestCase):
+    def test_portfolio_groups_follow_source_headings(self):
+        projects = parse_portfolio_projects(Path('contents/my-portfolio.md').read_text(encoding='utf-8'))
+        self.assertEqual([p.title for p in projects.values() if p.group == 'More Projects'],
+                         ['BantAI Buddy Extension', 'VWSim: Vacuum World Agent Simulator'])
+        self.assertEqual(len([p for p in projects.values() if p.group == 'Featured Projects']), 3)
+
+    def test_portfolio_group_can_change_and_be_unassigned(self):
+        source = '# More Projects\n## 1.) DeskDuck\n### Overview\nOriginal text.'
+        self.assertEqual(parse_portfolio_projects(source)['DeskDuck'].group, 'More Projects')
+        self.assertIsNone(parse_portfolio_projects(source.replace('# More Projects', '# Other'))['DeskDuck'].group)
+
     def test_load_markdown_returns_text_for_existing_file(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "sample.md"

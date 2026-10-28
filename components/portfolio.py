@@ -30,15 +30,10 @@ class PortfolioProject:
     body: str
     preview_path: Path
     preview_relative_path: Path
+    group: str | None = None
 
 
-PROJECT_ORDER: list[str] = [
-    "DeskDuck",
-    "Custom Neofetch-Style Github Profile",
-    "N-Queens Hill Climbing Visualizer",
-    "BantAI Buddy Extension",
-    "VWSim: Vacuum World Agent Simulator",
-]
+GROUP_NAMES = ("Featured Projects", "More Projects")
 
 PROJECT_MEDIA: dict[str, Path] = {
     "DeskDuck": Path("projects/deskduck/preview.png"),
@@ -71,6 +66,7 @@ def _slugify(title: str) -> str:
 def parse_portfolio_projects(markdown: str, asset_dir: Path | None = None) -> dict[str, PortfolioProject]:
     """Return known project sections keyed by their source Markdown title."""
     headings = list(PROJECT_HEADING.finditer(markdown))
+    group_headings = list(re.finditer(r"(?m)^# (.+?)\s*$", markdown))
     projects: dict[str, PortfolioProject] = {}
     base_asset_dir = asset_dir or Path("assets")
 
@@ -84,6 +80,8 @@ def parse_portfolio_projects(markdown: str, asset_dir: Path | None = None) -> di
         section = re.split(r"(?m)^# (?!#)", section)[0]
         body = remove_image_markdown(section).strip()
         rel_path = PROJECT_MEDIA[title]
+        preceding = [h for h in group_headings if h.start() < heading.start()]
+        group_name = preceding[-1].group(1).strip() if preceding else None
 
         projects[title] = PortfolioProject(
             slug=_slugify(title),
@@ -91,6 +89,7 @@ def parse_portfolio_projects(markdown: str, asset_dir: Path | None = None) -> di
             body=body,
             preview_relative_path=rel_path,
             preview_path=base_asset_dir / rel_path,
+            group=group_name if group_name in GROUP_NAMES else None,
         )
 
     return projects
