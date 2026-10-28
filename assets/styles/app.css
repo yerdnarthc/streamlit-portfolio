@@ -1,0 +1,154 @@
+@font-face {
+  font-family: "JetBrainsMono Nerd Font";
+  src: url("__JETBRAINS_MONO_FONT__") format("truetype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("__GEIST_BOLD_FONT__") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+}
+
+:root {
+  --portfolio-background: #191919;
+  --portfolio-surface: #252323;
+  --portfolio-surface-raised: #302c2c;
+  --portfolio-foreground: #bbbaba;
+  --portfolio-muted: #918f8f;
+  --portfolio-border: #423838;
+  --portfolio-accent: #965a5a;
+  --portfolio-accent-strong: #b67474;
+  --portfolio-accent-deep: #704242;
+}
+
+html,
+body,
+[data-testid="stAppViewContainer"],
+[data-testid="stSidebar"],
+[data-testid="stSidebar"] * {
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", Consolas, monospace;
+}
+
+[data-testid="stAppViewContainer"] {
+  background: var(--portfolio-background);
+  color: var(--portfolio-foreground);
+}
+
+[data-testid="stHeader"] {
+  background: transparent;
+}
+
+h1,
+h2,
+h3,
+[data-testid="stHeading"] {
+  font-family: Geist, "JetBrainsMono Nerd Font", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+[data-testid="stSidebar"] {
+  background: var(--portfolio-surface);
+  border-right: 1px solid var(--portfolio-border);
+}
+
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+[data-testid="stCaptionContainer"] {
+  color: var(--portfolio-muted);
+}
+
+[data-testid="stButton"] > button,
+[data-testid="stDownloadButton"] > button,
+[data-testid="stTextInput"] input,
+[data-testid="stTextArea"] textarea,
+[data-testid="stSelectbox"] > div > div,
+[data-testid="stMultiSelect"] > div > div,
+[data-testid="stDataFrame"],
+[data-testid="stForm"],
+[data-testid="stMetric"],
+[data-testid="stTabs"] button,
+[data-testid="stRadio"] label {
+  border-radius: 0 !important;
+}
+
+[data-testid="stButton"] > button,
+[data-testid="stDownloadButton"] > button {
+  background: var(--portfolio-accent-deep);
+  border: 1px solid var(--portfolio-accent-strong);
+  color: var(--portfolio-foreground);
+  font-weight: 700;
+}
+
+[data-testid="stButton"] > button:hover,
+[data-testid="stDownloadButton"] > button:hover {
+  background: var(--portfolio-accent);
+  border-color: var(--portfolio-accent-strong);
+}
+
+a {
+  color: var(--portfolio-accent-strong);
+  text-decoration-color: var(--portfolio-accent);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--portfolio-foreground);
+}
+
+button,
+a,
+input,
+textarea,
+[role="radio"],
+[role="tab"] {
+  transition: background-color 160ms ease-out, border-color 160ms ease-out,
+    color 160ms ease-out, transform 160ms ease-out;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[role="radio"]:focus-visible,
+[role="tab"]:focus-visible {
+  outline: 1px solid var(--portfolio-accent-strong);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--portfolio-accent-deep);
+  color: var(--portfolio-foreground);
+}
+
+* {
+  scrollbar-color: var(--portfolio-accent-deep) var(--portfolio-background);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--portfolio-background);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--portfolio-accent-deep);
+  border: 2px solid var(--portfolio-background);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
