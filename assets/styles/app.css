@@ -11,6 +11,10 @@
   --portfolio-accent-deep: #704242;
 }
 
+.st-key-pf_group_selector button {
+  border-radius: 0 !important;
+}
+
 html,
 body,
 [data-testid="stAppViewContainer"],

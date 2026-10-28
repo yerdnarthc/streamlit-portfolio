@@ -5,6 +5,28 @@ from streamlit.testing.v1 import AppTest
 
 
 class AppSmokeTests(unittest.TestCase):
+    def test_portfolio_empty_group_and_stale_selection_recover(self):
+        def fixture_app():
+            from pathlib import Path
+            import streamlit as st
+            from components.portfolio import parse_portfolio_projects, _portfolio_theater
+            projects = parse_portfolio_projects(
+                '# Featured Projects\n## 1.) DeskDuck\n### Overview\nFixture overview.'
+            )
+            if 'portfolio_group_selections' not in st.session_state:
+                st.session_state.portfolio_group_selections = {'Featured Projects': 'Removed project'}
+            _portfolio_theater(projects, Path('assets'))
+
+        app = AppTest.from_function(fixture_app).run()
+        self.assertFalse(app.exception)
+        self.assertTrue(any(h.value == 'DeskDuck' for h in app.subheader))
+        app.segmented_control(key='portfolio_group').set_value('More Projects').run()
+        self.assertFalse(app.exception)
+        self.assertTrue(any('No projects are available in More Projects' in item.value for item in app.info))
+        self.assertEqual(len(app.subheader), 0)
+        app.segmented_control(key='portfolio_group').set_value('Featured Projects').run()
+        self.assertTrue(any(h.value == 'DeskDuck' for h in app.subheader))
+
     def test_app_shows_portfolio_title_and_about_page(self) -> None:
         app = AppTest.from_file(Path(__file__).parents[1] / "app.py")
 
@@ -71,8 +93,12 @@ class AppSmokeTests(unittest.TestCase):
         self.assertTrue(any("N-Queens Hill Climbing Visualizer" in el.value for el in list(app.subheader) + list(app.markdown)))
 
         # Switch to VWSim
+        self.assertFalse(any(b.key == 'explore_vwsim_vacuum_world_agent_simulator' for b in app.button))
+        app.segmented_control(key='portfolio_group').set_value('More Projects').run()
         app.button(key="explore_vwsim_vacuum_world_agent_simulator").click().run()
         self.assertFalse(app.exception)
         self.assertTrue(
             any("VWSim: Vacuum World Agent Simulator" in el.value for el in list(app.subheader) + list(app.markdown))
         )
+        app.segmented_control(key='portfolio_group').set_value('Featured Projects').run()
+        self.assertTrue(any('N-Queens Hill Climbing Visualizer' in el.value for el in app.subheader))

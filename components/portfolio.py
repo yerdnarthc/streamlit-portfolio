@@ -164,11 +164,14 @@ def _enlarge_preview_landscape(project: PortfolioProject, asset_dir: Path) -> No
 def _select_project(title: str) -> None:
     """Update active project in session state."""
     st.session_state.portfolio_selected = title
+    remembered = dict(st.session_state.get("portfolio_group_selections", {}))
+    remembered[st.session_state.portfolio_group] = title
+    st.session_state.portfolio_group_selections = remembered
 
 
 def _render_project_index(projects: dict[str, PortfolioProject]) -> None:
     """Clean, restrained horizontal project index selector."""
-    ordered = [projects[t] for t in PROJECT_ORDER if t in projects]
+    ordered = list(projects.values())
     if not ordered:
         return
 
@@ -275,13 +278,23 @@ def _render_project_tabs(project: PortfolioProject) -> None:
 @st.fragment
 def _portfolio_theater(projects: dict[str, PortfolioProject], asset_dir: Path) -> None:
     """Self-contained interactive theater fragment for instant project switching."""
-    if st.session_state.get("portfolio_selected") not in projects:
-        st.session_state.portfolio_selected = next(iter(projects))
-
-    active_project = projects[st.session_state.portfolio_selected]
-
     with st.container(key="pf_portfolio_root"):
-        _render_project_index(projects)
+        with st.container(key="pf_group_selector"):
+            group = st.segmented_control(
+                "Project group", GROUP_NAMES, default="Featured Projects",
+                required=True, key="portfolio_group", label_visibility="collapsed",
+            )
+        group_projects = {title: p for title, p in projects.items() if p.group == group}
+        remembered = st.session_state.get("portfolio_group_selections", {})
+        selected = remembered.get(group)
+        if selected not in group_projects:
+            selected = next(iter(group_projects), None)
+        if selected is None:
+            st.info(f"No projects are available in {group} yet.")
+            return
+        st.session_state.portfolio_selected = selected
+        active_project = group_projects[selected]
+        _render_project_index(group_projects)
         st.divider()
         _render_project_stage(active_project, asset_dir)
         _render_project_tabs(active_project)
@@ -304,5 +317,9 @@ def render_portfolio(content_dir: Path, asset_dir: Path) -> None:
     for title in PROJECT_MEDIA:
         if title not in projects:
             st.warning(f"Project content for {title} could not be loaded.")
+
+    for project in projects.values():
+        if project.group is None:
+            st.warning(f"Place {project.title} under Featured Projects or More Projects in the portfolio content.")
 
     _portfolio_theater(projects, asset_dir)
