@@ -1,5 +1,5 @@
 const ENGINE_KEY = "__arthPortfolioMotionEngine";
-const ENGINE_VERSION = "1.1.0";
+const ENGINE_VERSION = "1.2.0";
 const ROOT_SELECTOR = '[data-testid="stAppViewContainer"]';
 const MAIN_SCROLL_SELECTOR = '[data-testid="stMain"]';
 const PORTFOLIO_TABS_SELECTOR =
@@ -81,14 +81,43 @@ const REVEAL_GROUPS = [
     delay: 65,
   },
   {
+    selector: '[class*="st-key-skills_spotlight_"]',
+    motion: "skills-spotlight",
+    replay: true,
+    eager: true,
+  },
+  {
     selector: ".st-key-skills_metrics [data-testid=\"stMetric\"]",
     motion: "metric",
     stagger: 82,
   },
   {
+    selector: '[class*="st-key-skills_metrics_stage_"]',
+    motion: "skills-metrics-stage",
+    replay: true,
+    eager: true,
+  },
+  {
     selector: ".st-key-skills_chart, .st-key-skills_table",
     motion: "panel",
     stagger: 88,
+  },
+  {
+    selector: '[class*="st-key-skills_chart_stage_"]',
+    motion: "skills-chart-stage",
+    replay: true,
+    eager: true,
+  },
+  {
+    selector: '[class*="st-key-skills_table_stage_"]',
+    motion: "skills-table-stage",
+    replay: true,
+    eager: true,
+  },
+  {
+    selector: ".st-key-skills_empty_state [data-testid=\"stAlert\"]",
+    motion: "feedback-error",
+    replay: true,
   },
   {
     selector: ".st-key-portfolio_page h2",
@@ -143,6 +172,7 @@ const REVEAL_GROUPS = [
 const TILT_SELECTOR = [
   ".st-key-about_photo_frame",
   '[class*="st-key-pf_preview_frame"]',
+  '[class*="st-key-skills_spotlight_"]',
 ].join(",");
 
 function clamp(value, minimum, maximum) {

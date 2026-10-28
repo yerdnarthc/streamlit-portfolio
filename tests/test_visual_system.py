@@ -121,3 +121,22 @@ class VisualSystemTests(unittest.TestCase):
             script,
         )
         self.assertIn("scrollContainer?.scrollTo", script)
+
+    def test_skills_motion_has_spotlight_and_filter_continuity(self) -> None:
+        component = Path("components/skills.py").read_text(encoding="utf-8")
+        script = Path("ui/motion/motion.js").read_text(encoding="utf-8")
+        motion_css = Path("ui/motion/motion.css").read_text(encoding="utf-8")
+        app_css = Path("assets/styles/app.css").read_text(encoding="utf-8")
+
+        self.assertIn('skills_spotlight_', component)
+        self.assertIn('skills_metrics_stage_', component)
+        self.assertIn('skills_chart_stage_', component)
+        self.assertIn('skills_table_stage_', component)
+        self.assertIn('selector: \'[class*="st-key-skills_spotlight_"]\'', script)
+        self.assertIn('motion: "skills-spotlight"', script)
+        self.assertIn('replay: true', script)
+        self.assertIn('@keyframes skills-spotlight-enter', motion_css)
+        self.assertIn('@keyframes skills-metric-settle', motion_css)
+        self.assertIn('@keyframes skills-panel-settle', motion_css)
+        self.assertIn('[class*="st-key-skills_spotlight_"]', app_css)
+        self.assertIn('.skills-rating-badge', app_css)

@@ -669,6 +669,85 @@ textarea:focus-visible,
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
+   SKILLS SECTION (DISTILLED CRAFT)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.st-key-skills_page {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* Highlighted Skill Spotlight Card */
+[class*="st-key-skills_spotlight_"] {
+  background: var(--portfolio-surface) !important;
+  border: 1px solid var(--portfolio-border) !important;
+  border-left: 2px solid var(--portfolio-accent-strong) !important;
+  border-radius: 0 !important;
+  padding: 1.25rem 1.5rem !important;
+  margin-top: 0.85rem !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: border-color 180ms ease-out, background-color 180ms ease-out !important;
+}
+
+[class*="st-key-skills_spotlight_"]:hover {
+  border-color: var(--portfolio-accent) !important;
+  border-left-color: var(--portfolio-accent-strong) !important;
+  background: var(--portfolio-surface-raised) !important;
+}
+
+[class*="st-key-skills_spotlight_"] h3 {
+  margin-top: 0 !important;
+  margin-bottom: 0.45rem !important;
+  font-family: Geist, "JetBrainsMono Nerd Font", sans-serif !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: var(--portfolio-muted-white) !important;
+}
+
+.skills-rating-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  background: var(--portfolio-surface-raised);
+  border: 1px solid var(--portfolio-border);
+  color: var(--portfolio-accent-strong);
+  margin-bottom: 0.85rem;
+  border-radius: 0;
+  width: fit-content;
+}
+
+[class*="st-key-skills_spotlight_"] [data-testid="stMarkdownContainer"] p {
+  color: var(--portfolio-foreground) !important;
+  font-size: 0.98rem !important;
+  line-height: 1.8 !important;
+  margin: 0 !important;
+}
+
+/* Skills Metrics Cards */
+.st-key-skills_metrics [data-testid="stMetric"] {
+  background: var(--portfolio-surface);
+  border: 1px solid var(--portfolio-border);
+  border-radius: 0 !important;
+  padding: 1.1rem 1.25rem;
+  transition: border-color 180ms ease-out, background-color 180ms ease-out;
+}
+
+.st-key-skills_metrics [data-testid="stMetric"]:hover {
+  border-color: var(--portfolio-accent-deep);
+  background: var(--portfolio-surface-raised);
+}
+
+.st-key-skills_empty_state {
+  margin-top: 1.5rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
    PORTFOLIO (DISTILLED CRAFT)
    ══════════════════════════════════════════════════════════════════════════════ */
 

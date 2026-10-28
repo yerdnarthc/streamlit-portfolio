@@ -92,9 +92,20 @@ enter as secondary panels.
 
 ### Skills
 
-Controls establish first, followed by the two metrics. The chart and interactive
-table reveal as complete surfaces; their internal Vega and dataframe DOM is not
-manipulated.
+The header and caption establish the section identity outside the fragment.
+Controls enter first via `control-group`. When the user selects or toggles a skill,
+the highlighted skill receives a unique keyed stage (`skills_spotlight_*`) that
+replays an eager staged entrance: the card establishes, the skill title resolves
+from the left with a shallow crop reveal, the self-assessed rating badge scales into
+place, and the explanation prose settles smoothly. On desktop, the spotlight card
+gains restrained 3D pointer tilt.
+
+When the minimum rating slider adjusts, the inner metrics, chart, and table stages
+(`skills_metrics_stage_*`, `skills_chart_stage_*`, `skills_table_stage_*`) animate
+with smooth numeric and panel settlement transitions, maintaining visual continuity
+between filter changes without full-page reloads. When no skills match, the empty
+state alert slides in with confident feedback motion. Reduced motion replaces all
+translations and scales with instantaneous or clean opacity transitions.
 
 ### Portfolio
 

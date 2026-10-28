@@ -104,6 +104,139 @@ html.portfolio-motion-ready [data-motion="feedback-success"] {
   transition-duration: 620ms;
 }
 
+/* ══════════════════════════════════════════════════════════════════════════════
+   SKILLS SECTION MOTION
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+html.portfolio-motion-ready
+  [data-motion="skills-spotlight"][data-motion-state="pending"] {
+  clip-path: inset(0 0 10% 0);
+  filter: saturate(0.82);
+  transform: translate3d(0, 10px, 0) scale(0.995);
+}
+
+html.portfolio-motion-ready [data-motion="skills-spotlight"] {
+  transition-duration: 480ms;
+}
+
+html.portfolio-motion-ready
+  [data-motion="skills-spotlight"][data-motion-state="revealed"] {
+  animation: skills-spotlight-enter 480ms var(--motion-ease-emphasized) both;
+}
+
+html.portfolio-motion-ready
+  [data-motion="skills-spotlight"][data-motion-state="revealed"]
+  h3 {
+  animation: skills-copy-enter 440ms var(--motion-ease-emphasized) 30ms both;
+}
+
+html.portfolio-motion-ready
+  [data-motion="skills-spotlight"][data-motion-state="revealed"]
+  .skills-rating-badge {
+  animation: skills-badge-enter 400ms var(--motion-ease-emphasized) 60ms both;
+}
+
+html.portfolio-motion-ready
+  [data-motion="skills-spotlight"][data-motion-state="revealed"]
+  [data-testid="stMarkdownContainer"] p {
+  animation: skills-prose-enter 480ms var(--motion-ease-emphasized) 90ms both;
+}
+
+@keyframes skills-spotlight-enter {
+  0% {
+    clip-path: inset(0 5% 0 0);
+    filter: saturate(0.75);
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.992);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    filter: none;
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes skills-copy-enter {
+  0% {
+    clip-path: inset(0 10% 0 0);
+    opacity: 0;
+    transform: translate3d(-10px, 0, 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes skills-badge-enter {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -4px, 0) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes skills-prose-enter {
+  0% {
+    clip-path: inset(0 0 6% 0);
+    opacity: 0;
+    transform: translate3d(0, 6px, 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Skills Filter Continuity (Metrics, Chart, Table) */
+html.portfolio-motion-ready
+  [data-motion="skills-metrics-stage"][data-motion-state="revealed"]
+  [data-testid="stMetric"] {
+  animation: skills-metric-settle 400ms var(--motion-ease-emphasized) both;
+}
+
+@keyframes skills-metric-settle {
+  0% {
+    filter: brightness(1.12);
+    opacity: 0.35;
+    transform: translate3d(0, 5px, 0) scale(0.988);
+  }
+  100% {
+    filter: none;
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+html.portfolio-motion-ready
+  [data-motion="skills-chart-stage"][data-motion-state="revealed"] {
+  animation: skills-panel-settle 440ms var(--motion-ease-emphasized) 30ms both;
+}
+
+html.portfolio-motion-ready
+  [data-motion="skills-table-stage"][data-motion-state="revealed"] {
+  animation: skills-panel-settle 440ms var(--motion-ease-emphasized) 60ms both;
+}
+
+@keyframes skills-panel-settle {
+  0% {
+    clip-path: inset(0 0 3% 0);
+    opacity: 0.45;
+    transform: translate3d(0, 6px, 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 html.portfolio-motion-ready [data-motion="project-stage"][data-motion-state="pending"] {
   clip-path: inset(0 0 6% 0);
   filter: saturate(0.82);
@@ -575,6 +708,25 @@ html.portfolio-motion-ready
     animation: feedback-reduced-confirm 180ms ease-out both;
   }
 
+  html.portfolio-motion-ready
+    [data-motion="skills-spotlight"][data-motion-state="revealed"],
+  html.portfolio-motion-ready
+    [data-motion="skills-spotlight"][data-motion-state="revealed"]
+    h3,
+  html.portfolio-motion-ready
+    [data-motion="skills-spotlight"][data-motion-state="revealed"]
+    .skills-rating-badge,
+  html.portfolio-motion-ready
+    [data-motion="skills-spotlight"][data-motion-state="revealed"]
+    [data-testid="stMarkdownContainer"]
+    p,
+  html.portfolio-motion-ready
+    [data-motion="skills-metrics-stage"][data-motion-state="revealed"]
+    [data-testid="stMetric"],
+  html.portfolio-motion-ready
+    [data-motion="skills-chart-stage"][data-motion-state="revealed"],
+  html.portfolio-motion-ready
+    [data-motion="skills-table-stage"][data-motion-state="revealed"],
   html.portfolio-motion-ready
     [data-motion="project-stage"][data-motion-state="revealed"]
     [class*="st-key-pf_project_identity_"],

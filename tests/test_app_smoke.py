@@ -141,6 +141,23 @@ class AppSmokeTests(unittest.TestCase):
         self.assertGreaterEqual(len(app.dataframe), 1)
         self.assertTrue(any("Skill" in metric.label for metric in app.metric))
 
+    def test_skills_page_updates_highlight_and_filter(self) -> None:
+        app = AppTest.from_file(Path(__file__).parents[1] / "app.py")
+
+        app.run()
+        app.sidebar.radio[0].set_value("Skills").run()
+        self.assertFalse(app.exception)
+
+        # Highlight C#
+        app.selectbox[0].set_value("C#").run()
+        self.assertFalse(app.exception)
+        self.assertTrue(any("C#" in h.value for h in app.subheader))
+
+        # Filter minimum rating to 9 (AI-Assisted Software Development only)
+        app.slider[0].set_value(9).run()
+        self.assertFalse(app.exception)
+        self.assertEqual(len(app.dataframe[0].value), 1)
+
     def test_autobiography_page_renders_editorial_chapters(self) -> None:
         app = AppTest.from_file(Path(__file__).parents[1] / "app.py").run()
 
