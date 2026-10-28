@@ -21,8 +21,24 @@ class VisualSystemTests(unittest.TestCase):
         self.assertIn("prefers-reduced-motion", css)
 
     def test_local_font_assets_exist(self) -> None:
-        font_directory = Path("assets/fonts")
+        font_directory = Path("static/fonts")
 
+        self.assertTrue((font_directory / "JetBrainsMonoNerdFont-Regular.ttf").is_file())
+        self.assertTrue((font_directory / "Geist-Bold.woff2").is_file())
+
+    def test_theme_registers_the_required_self_hosted_fonts(self) -> None:
+        theme = Path(".streamlit/config.toml").read_text(encoding="utf-8")
+
+        self.assertIn("enableStaticServing = true", theme)
+        self.assertIn('font = "JetBrainsMono Nerd Font"', theme)
+        self.assertIn('headingFont = "Geist"', theme)
+        self.assertIn('codeFont = "JetBrainsMono Nerd Font"', theme)
+        self.assertIn('family = "JetBrainsMono Nerd Font"', theme)
+        self.assertIn('url = "app/static/fonts/JetBrainsMonoNerdFont-Regular.ttf"', theme)
+        self.assertIn('family = "Geist"', theme)
+        self.assertIn('url = "app/static/fonts/Geist-Bold.woff2"', theme)
+
+        font_directory = Path("static/fonts")
         self.assertTrue((font_directory / "JetBrainsMonoNerdFont-Regular.ttf").is_file())
         self.assertTrue((font_directory / "Geist-Bold.woff2").is_file())
 

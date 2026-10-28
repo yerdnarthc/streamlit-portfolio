@@ -4,8 +4,23 @@ primaryColor = "#965a5a"
 backgroundColor = "#191919"
 secondaryBackgroundColor = "#252323"
 textColor = "#bbbaba"
-font = "monospace"
+font = "JetBrainsMono Nerd Font"
+headingFont = "Geist"
+codeFont = "JetBrainsMono Nerd Font"
 borderColor = "#423838"
+
+[[theme.fontFaces]]
+family = "JetBrainsMono Nerd Font"
+url = "app/static/fonts/JetBrainsMonoNerdFont-Regular.ttf"
+weight = 400
+
+[[theme.fontFaces]]
+family = "Geist"
+url = "app/static/fonts/Geist-Bold.woff2"
+weight = 700
+
+[server]
+enableStaticServing = true
 
 [client]
 toolbarMode = "minimal"
