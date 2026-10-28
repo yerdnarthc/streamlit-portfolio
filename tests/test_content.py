@@ -2,6 +2,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
+from utils.autobiography import build_autobiography_pdf, run_print_statement
 from utils.content import load_markdown, parse_skills_markdown, remove_image_markdown
 
 
@@ -35,3 +36,19 @@ class ContentTests(unittest.TestCase):
             frame.to_dict("records"),
             [{"Skill": "Python", "Rating": 7, "How I Use It": "APIs"}],
         )
+
+    def test_run_print_statement_returns_a_literal_message_only(self) -> None:
+        self.assertEqual(
+            run_print_statement('print("Thanks for reading!")'), "Thanks for reading!"
+        )
+
+        with self.assertRaises(ValueError):
+            run_print_statement("import os")
+
+    def test_build_autobiography_pdf_returns_pdf_bytes(self) -> None:
+        pdf = build_autobiography_pdf(
+            "# My Autobiography\n\nThis is a short test.",
+            Path("static/fonts/JetBrainsMonoNerdFont-Regular.ttf"),
+        )
+
+        self.assertTrue(pdf.startswith(b"%PDF"))

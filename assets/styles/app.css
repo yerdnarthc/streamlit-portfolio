@@ -65,6 +65,12 @@ h3,
   color: var(--portfolio-accent-strong) !important;
 }
 
+[data-testid="stCode"] {
+  background: var(--portfolio-surface-raised) !important;
+  border: 1px solid var(--portfolio-accent-deep);
+  border-radius: 0 !important;
+}
+
 [data-testid="stButton"] > button,
 [data-testid="stDownloadButton"] > button,
 [data-testid="stTextInput"] input,
