@@ -46,9 +46,7 @@ class ContentTests(unittest.TestCase):
             run_print_statement("import os")
 
     def test_build_autobiography_pdf_returns_pdf_bytes(self) -> None:
-        pdf = build_autobiography_pdf(
-            "# My Autobiography\n\nThis is a short test.",
-            Path("static/fonts/JetBrainsMonoNerdFont-Regular.ttf"),
-        )
+        pdf = build_autobiography_pdf("# My Autobiography\n\nThis is a short test.")
 
         self.assertTrue(pdf.startswith(b"%PDF"))
+        self.assertIn(b"/Helvetica", pdf)

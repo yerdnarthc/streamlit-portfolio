@@ -1,7 +1,6 @@
 """Safe interactive and PDF helpers for the autobiography section."""
 
 import ast
-from pathlib import Path
 import re
 
 from fpdf import FPDF
@@ -45,24 +44,41 @@ def run_print_statement(source: str) -> str:
     return call.args[0].value
 
 
-def build_autobiography_pdf(markdown: str, font_path: Path) -> bytes:
-    """Create a Unicode-capable PDF from the unmodified autobiography Markdown."""
+def _core_font_text(text: str) -> str:
+    """Normalize typography that the standard Helvetica PDF font cannot encode."""
+    replacements = str.maketrans(
+        {
+            "\u2014": "-",
+            "\u2013": "-",
+            "\u2018": "'",
+            "\u2019": "'",
+            "\u201c": '"',
+            "\u201d": '"',
+        }
+    )
+    return text.translate(replacements).encode("latin-1", "replace").decode("latin-1")
+
+
+def build_autobiography_pdf(markdown: str) -> bytes:
+    """Create a one-inch-margin PDF using the standard Helvetica font."""
     pdf = FPDF()
-    pdf.set_auto_page_break(auto=True, margin=16)
+    one_inch = 25.4
+    pdf.set_margins(one_inch, one_inch, one_inch)
+    pdf.set_auto_page_break(auto=True, margin=one_inch)
     pdf.add_page()
-    pdf.add_font("PortfolioMono", fname=str(font_path))
     pdf.set_title("Arth Andrey C. Endrina — Autobiography")
 
     for raw_line in markdown.splitlines():
         heading = raw_line.startswith("#")
         text = re.sub(r"^#{1,6}\s*", "", raw_line)
         text = text.replace("***", "").replace("**", "").replace("`", "")
+        text = _core_font_text(text)
 
         if not text:
             pdf.ln(4)
             continue
 
-        pdf.set_font("PortfolioMono", size=16 if heading else 10)
+        pdf.set_font("Helvetica", size=16 if heading else 10)
         pdf.multi_cell(0, 8 if heading else 6, text)
 
     return bytes(pdf.output())

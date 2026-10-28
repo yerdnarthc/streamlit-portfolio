@@ -23,3 +23,17 @@ class AppSmokeTests(unittest.TestCase):
         self.assertFalse(app.exception)
         self.assertGreaterEqual(len(app.dataframe), 1)
         self.assertTrue(any("Skill" in metric.label for metric in app.metric))
+
+    def test_autobiography_code_panel_runs_the_closing_message(self) -> None:
+        app = AppTest.from_file(Path(__file__).parents[1] / "app.py")
+
+        app.run()
+        app.sidebar.radio[0].set_value("Autobiography").run()
+
+        self.assertFalse(app.exception)
+        self.assertEqual(len(app.text_area), 1)
+        self.assertEqual(len(app.button), 1)
+        app.button[0].click().run()
+        self.assertTrue(
+            any("Thank you for taking your time" in code.value for code in app.code)
+        )

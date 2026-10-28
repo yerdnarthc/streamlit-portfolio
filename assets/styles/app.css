@@ -71,6 +71,10 @@ h3,
   border-radius: 0 !important;
 }
 
+[data-testid="stVerticalBlockBorderWrapper"] {
+  border-radius: 0 !important;
+}
+
 [data-testid="stButton"] > button,
 [data-testid="stDownloadButton"] > button,
 [data-testid="stTextInput"] input,
@@ -95,6 +99,10 @@ h3,
   border: 1px solid var(--portfolio-accent-strong);
   color: var(--portfolio-foreground);
   font-weight: 700;
+}
+
+[data-testid="stDownloadButton"] {
+  margin-top: 2rem;
 }
 
 [data-testid="stButton"] > button:hover,

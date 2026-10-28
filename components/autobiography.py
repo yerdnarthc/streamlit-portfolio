@@ -21,14 +21,21 @@ def render_autobiography(content_dir: Path) -> None:
 
     if closing_code:
         st.divider()
-        st.subheader("Run the closing program")
-        code = st.text_area(
-            "Closing Python code",
-            value=closing_code,
-            height=72,
-            key="autobiography_closing_code",
-        )
-        if st.button("Run", icon=":material/play_arrow:", key="run_autobiography_code"):
+        with st.container(border=True):
+            code = st.text_area(
+                "Closing Python code",
+                value=closing_code,
+                height=72,
+                key="autobiography_closing_code",
+                label_visibility="collapsed",
+            )
+            _, run_column = st.columns([8, 1])
+            with run_column:
+                run_code = st.button(
+                    "Run", icon=":material/play_arrow:", key="run_autobiography_code"
+                )
+
+        if run_code:
             try:
                 st.session_state.autobiography_code_output = run_print_statement(code)
             except ValueError as error:
@@ -38,10 +45,9 @@ def render_autobiography(content_dir: Path) -> None:
         if output := st.session_state.get("autobiography_code_output"):
             st.code(output, language="text")
 
-    font_path = Path(__file__).parents[1] / "static" / "fonts" / "JetBrainsMonoNerdFont-Regular.ttf"
     st.download_button(
         "Download my autobiography as PDF",
-        data=build_autobiography_pdf(autobiography, font_path),
+        data=build_autobiography_pdf(autobiography),
         file_name="arth-endrina-autobiography.pdf",
         mime="application/pdf",
     )
