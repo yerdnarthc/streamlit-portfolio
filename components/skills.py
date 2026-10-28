@@ -21,6 +21,7 @@ def render_skills(content_dir: Path) -> None:
 
     st.header("Skills")
     st.caption("These ratings are my current self-assessment on a scale of 1–10.")
+    st.divider()
 
     rating_column, highlight_column = st.columns([1, 2], gap="large")
     with rating_column:
@@ -42,12 +43,14 @@ def render_skills(content_dir: Path) -> None:
         st.info("No skills match that minimum rating.")
         return
 
+    st.divider()
     highest_rating, average_rating = st.columns(2)
     with highest_rating:
         st.metric("Highest Skill Rating", int(filtered_frame["Rating"].max()))
     with average_rating:
         st.metric("Average Skill Rating", f"{filtered_frame['Rating'].mean():.1f}/10")
 
+    st.divider()
     st.subheader("Ratings")
     st.vega_lite_chart(
         filtered_frame[["Skill", "Rating"]],
@@ -80,8 +83,19 @@ def render_skills(content_dir: Path) -> None:
         width="stretch",
     )
 
+    st.divider()
     st.subheader("Skills at a glance")
     table_columns = ["Skill", "Rating"]
     if show_explanations:
         table_columns.append("How I Use It")
-    st.dataframe(filtered_frame[table_columns], hide_index=True, width="stretch")
+
+    table_frame = filtered_frame[table_columns].copy()
+    table_frame["Rating"] = table_frame["Rating"].astype(str)
+    st.table(
+        table_frame,
+        border="horizontal",
+        hide_index=True,
+        width="stretch",
+        height="content",
+        alt="A table listing skills, self-assessed ratings, and how each skill is used.",
+    )

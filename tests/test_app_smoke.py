@@ -21,5 +21,5 @@ class AppSmokeTests(unittest.TestCase):
         app.sidebar.radio[0].set_value("Skills").run()
 
         self.assertFalse(app.exception)
-        self.assertGreaterEqual(len(app.dataframe), 1)
+        self.assertGreaterEqual(len(app.table), 1)
         self.assertTrue(any("Skill" in metric.label for metric in app.metric))
