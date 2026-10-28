@@ -17,6 +17,10 @@ body,
   font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", Consolas, monospace;
 }
 
+[data-testid="stMainBlockContainer"] {
+  padding-top: 3rem;
+}
+
 [data-testid="stAppViewContainer"] {
   background: var(--portfolio-background);
   color: var(--portfolio-foreground);
@@ -40,17 +44,10 @@ h3,
   border-right: 1px solid var(--portfolio-border);
 }
 
+
 [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
 [data-testid="stCaptionContainer"] {
   color: var(--portfolio-muted);
-}
-
-[data-testid="stTable"] th,
-[data-testid="stTable"] td {
-  overflow-wrap: anywhere;
-  text-align: left !important;
-  vertical-align: top;
-  white-space: normal !important;
 }
 
 [data-testid="stButton"] > button,

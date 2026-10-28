@@ -21,9 +21,8 @@ def render_skills(content_dir: Path) -> None:
 
     st.header("Skills")
     st.caption("These ratings are my current self-assessment on a scale of 1–10.")
-    st.divider()
 
-    rating_column, highlight_column = st.columns([1, 2], gap="large")
+    rating_column, highlight_column = st.columns([1, 2], gap="small")
     with rating_column:
         minimum_rating = st.slider(
             "Minimum skill rating", min_value=1, max_value=10, value=1
@@ -50,7 +49,6 @@ def render_skills(content_dir: Path) -> None:
     with average_rating:
         st.metric("Average Skill Rating", f"{filtered_frame['Rating'].mean():.1f}/10")
 
-    st.divider()
     st.subheader("Ratings")
     st.vega_lite_chart(
         filtered_frame[["Skill", "Rating"]],
@@ -89,13 +87,20 @@ def render_skills(content_dir: Path) -> None:
     if show_explanations:
         table_columns.append("How I Use It")
 
-    table_frame = filtered_frame[table_columns].copy()
-    table_frame["Rating"] = table_frame["Rating"].astype(str)
-    st.table(
-        table_frame,
-        border="horizontal",
+    table_height = 40 * (len(filtered_frame) + 1)
+    st.dataframe(
+        filtered_frame[table_columns],
+        column_config={
+            "Skill": st.column_config.TextColumn("Skill", width="medium"),
+            "Rating": st.column_config.NumberColumn(
+                "Rating", width="small", alignment="left", format="%d"
+            ),
+            "How I Use It": st.column_config.TextColumn(
+                "How I Use It", width=900
+            ),
+        },
         hide_index=True,
         width="stretch",
-        height="content",
-        alt="A table listing skills, self-assessed ratings, and how each skill is used.",
+        height=table_height,
+        row_height=40,
     )
