@@ -1,0 +1,37 @@
+from pathlib import Path
+import tempfile
+import unittest
+
+from utils.content import load_markdown, parse_skills_markdown, remove_image_markdown
+
+
+class ContentTests(unittest.TestCase):
+    def test_load_markdown_returns_text_for_existing_file(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "sample.md"
+            path.write_text("# Hello", encoding="utf-8")
+
+            self.assertEqual(load_markdown(path), "# Hello")
+
+    def test_load_markdown_returns_none_for_missing_file(self) -> None:
+        self.assertIsNone(load_markdown(Path("does-not-exist.md")))
+
+    def test_remove_image_markdown_removes_local_image_line(self) -> None:
+        text = "Intro\n![Preview](../assets/preview.png)\nOutro"
+
+        self.assertEqual(remove_image_markdown(text), "Intro\nOutro")
+
+    def test_parse_skills_markdown_reads_valid_rows_only(self) -> None:
+        markdown = (
+            "| Skill | Rating | How I Use It |\n"
+            "| --- | ---: | --- |\n"
+            "| Python | 7 | APIs |\n"
+            "| Bad | eleven | Invalid |"
+        )
+
+        frame = parse_skills_markdown(markdown)
+
+        self.assertEqual(
+            frame.to_dict("records"),
+            [{"Skill": "Python", "Rating": 7, "How I Use It": "APIs"}],
+        )
