@@ -13,7 +13,7 @@ class AppSmokeTests(unittest.TestCase):
         self.assertTrue(any('Custom Neofetch' in h.value for h in app.subheader))
         app.button(key='pf_next').click().run()
         self.assertTrue(app.button(key='pf_next').disabled)
-        app.segmented_control(key='portfolio_group').set_value('More Projects').run()
+        app.button(key='pf_show_more').click().run()
         self.assertTrue(app.button(key='pf_previous').disabled)
         app.button(key='pf_next').click().run()
         self.assertTrue(any('VWSim' in h.value for h in app.subheader))
@@ -37,11 +37,12 @@ class AppSmokeTests(unittest.TestCase):
         app = AppTest.from_function(fixture_app).run()
         self.assertFalse(app.exception)
         self.assertTrue(any(h.value == 'DeskDuck' for h in app.subheader))
-        app.segmented_control(key='portfolio_group').set_value('More Projects').run()
+        app.button(key='pf_show_more').click().run()
         self.assertFalse(app.exception)
         self.assertTrue(any('No projects are available in More Projects' in item.value for item in app.info))
-        self.assertEqual(len(app.subheader), 0)
-        app.segmented_control(key='portfolio_group').set_value('Featured Projects').run()
+        self.assertTrue(any(h.value == 'More Projects' for h in app.subheader))
+        self.assertFalse(any(h.value == 'DeskDuck' for h in app.subheader))
+        app.button(key='pf_show_featured').click().run()
         self.assertTrue(any(h.value == 'DeskDuck' for h in app.subheader))
 
     def test_app_shows_portfolio_title_and_about_page(self) -> None:
@@ -95,6 +96,9 @@ class AppSmokeTests(unittest.TestCase):
 
         self.assertFalse(app.exception)
         self.assertTrue(any("Portfolio" in h.value for h in app.header))
+        self.assertTrue(any(h.value == "Featured Projects" for h in app.subheader))
+        self.assertEqual(len(app.segmented_control), 0)
+        self.assertEqual(app.button(key="pf_show_more").label, "More Projects")
 
     def test_portfolio_page_switches_between_project_dossiers(self) -> None:
         """Visitor can select different project capsules in the theater rail."""
@@ -111,11 +115,11 @@ class AppSmokeTests(unittest.TestCase):
 
         # Switch to VWSim
         self.assertFalse(any(b.key == 'explore_vwsim_vacuum_world_agent_simulator' for b in app.button))
-        app.segmented_control(key='portfolio_group').set_value('More Projects').run()
+        app.button(key='pf_show_more').click().run()
         app.button(key="explore_vwsim_vacuum_world_agent_simulator").click().run()
         self.assertFalse(app.exception)
         self.assertTrue(
             any("VWSim: Vacuum World Agent Simulator" in el.value for el in list(app.subheader) + list(app.markdown))
         )
-        app.segmented_control(key='portfolio_group').set_value('Featured Projects').run()
+        app.button(key='pf_show_featured').click().run()
         self.assertTrue(any('N-Queens Hill Climbing Visualizer' in el.value for el in app.subheader))

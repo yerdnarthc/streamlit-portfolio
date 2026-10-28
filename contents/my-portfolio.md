@@ -217,9 +217,6 @@ The vacuum world is a well-known problem in AI where an agent must navigate a gr
 
 ### My Contribution
 
-
-
-
 - I designed and developed the entire application, from the core simulation model to the Windows Forms interface and console runner.
 - I implemented the Random, Simple Reflex, and Model-Based Reflex agents to demonstrate increasing levels of decision-making sophistication.
 - I built the model-based agent's internal map, boundary tracking, clean-and-dirty cell records, and breadth-first-search navigation to unexplored cells.
@@ -235,9 +232,6 @@ The vacuum world is a well-known problem in AI where an agent must navigate a gr
 
 ### Tools Used
 
-
-
-
 - `C#`
 - `.NET Standard 2.0`
 - `.NET Framework 4.7.2`
@@ -246,8 +240,6 @@ The vacuum world is a well-known problem in AI where an agent must navigate a gr
 - `Visual Studio`
 
 ### Outcome and Next Steps
-
-
 
 The project is complete and provides both a Windows Forms visualizer for comparing agent behavior in real time and a .NET console runner for quick testing. It demonstrates how different AI agent architectures perform in the same vacuum-world environment through scores, progress, and internal reasoning logs.
 

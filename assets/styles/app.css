@@ -11,10 +11,6 @@
   --portfolio-accent-deep: #704242;
 }
 
-.st-key-pf_group_selector button {
-  border-radius: 0 !important;
-}
-
 html,
 body,
 [data-testid="stAppViewContainer"],
@@ -436,14 +432,43 @@ textarea:focus-visible,
   color: var(--portfolio-foreground) !important;
 }
 
-/* Portfolio navigation: group, project, then reading stage. */
-.st-key-pf_group_selector {
-  padding-bottom: 0.25rem;
+/* Portfolio navigation: featured work leads; additional work stays secondary. */
+[class*="st-key-pf_group_header_"] {
+  margin-top: 0.5rem;
+  padding: 0.35rem 0 0.85rem;
+  border-bottom: 1px solid var(--portfolio-border);
 }
-.st-key-pf_group_selector button {
+.st-key-pf_group_header_featured {
+  padding-bottom: 1rem;
+  border-bottom-color: var(--portfolio-accent-deep);
+}
+.st-key-pf_group_header_featured h3 {
+  font-size: clamp(1.65rem, 2.8vw, 2.2rem) !important;
+  font-weight: 700 !important;
+  color: var(--portfolio-muted-white) !important;
+}
+.st-key-pf_group_header_more h3 {
+  font-size: clamp(1.25rem, 2vw, 1.55rem) !important;
+  font-weight: 600 !important;
+  color: var(--portfolio-foreground) !important;
+}
+[class*="st-key-pf_group_header_"] h3 {
+  margin: 0 !important;
+}
+[class*="st-key-pf_group_header_"] button[kind="tertiary"] {
   min-height: 44px;
+  padding-inline: 0.25rem !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid transparent !important;
   border-radius: 0 !important;
-  transition: background-color 180ms ease-out, border-color 180ms ease-out;
+  color: var(--portfolio-muted) !important;
+  transition: color 160ms ease-out, border-color 160ms ease-out;
+}
+[class*="st-key-pf_group_header_"] button[kind="tertiary"]:hover,
+[class*="st-key-pf_group_header_"] button[kind="tertiary"]:focus-visible {
+  color: var(--portfolio-muted-white) !important;
+  border-bottom-color: var(--portfolio-accent-strong) !important;
 }
 .st-key-pf_index_bar button {
   position: relative;
@@ -484,7 +509,10 @@ textarea:focus-visible,
   opacity: 0.4;
 }
 @media (max-width: 640px) {
-  .st-key-pf_group_selector button { padding-inline: 0.65rem; }
+  [class*="st-key-pf_group_header_"] {
+    align-items: flex-start !important;
+    row-gap: 0.25rem;
+  }
   .st-key-pf_browse_toolbar { row-gap: 0.25rem; }
 }
 

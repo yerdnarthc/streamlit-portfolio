@@ -169,6 +169,11 @@ def _select_project(title: str) -> None:
     st.session_state.portfolio_group_selections = remembered
 
 
+def _select_project_group(group: str) -> None:
+    """Move between portfolio groups while preserving each group's selection."""
+    st.session_state.portfolio_group = group
+
+
 def _render_project_index(projects: dict[str, PortfolioProject]) -> None:
     """Clean, restrained horizontal project index selector."""
     ordered = list(projects.values())
@@ -279,13 +284,42 @@ def _render_project_tabs(project: PortfolioProject) -> None:
 def _portfolio_theater(projects: dict[str, PortfolioProject], asset_dir: Path) -> None:
     """Self-contained interactive theater fragment for instant project switching."""
     with st.container(key="pf_portfolio_root"):
-        with st.container(key="pf_group_selector"):
-            counts = {name: sum(p.group == name for p in projects.values()) for name in GROUP_NAMES}
-            group = st.segmented_control(
-                "Project group", GROUP_NAMES, default="Featured Projects",
-                required=True, key="portfolio_group", label_visibility="collapsed",
-                format_func=lambda name: f"{name} · {counts[name]}",
-            )
+        group = st.session_state.get("portfolio_group", GROUP_NAMES[0])
+        if group not in GROUP_NAMES:
+            group = GROUP_NAMES[0]
+        st.session_state.portfolio_group = group
+
+        header_key = (
+            "pf_group_header_featured"
+            if group == GROUP_NAMES[0]
+            else "pf_group_header_more"
+        )
+        with st.container(
+            key=header_key,
+            horizontal=True,
+            horizontal_alignment="distribute",
+            vertical_alignment="center",
+        ):
+            st.subheader(group)
+            if group == GROUP_NAMES[0]:
+                st.button(
+                    "More Projects",
+                    icon=":material/arrow_forward:",
+                    icon_position="right",
+                    key="pf_show_more",
+                    type="tertiary",
+                    on_click=_select_project_group,
+                    args=(GROUP_NAMES[1],),
+                )
+            else:
+                st.button(
+                    "Back to Featured Projects",
+                    icon=":material/arrow_back:",
+                    key="pf_show_featured",
+                    type="tertiary",
+                    on_click=_select_project_group,
+                    args=(GROUP_NAMES[0],),
+                )
         group_projects = {title: p for title, p in projects.items() if p.group == group}
         remembered = st.session_state.get("portfolio_group_selections", {})
         selected = remembered.get(group)
