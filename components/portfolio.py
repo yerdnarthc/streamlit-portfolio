@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 
+from PIL import Image
 import streamlit as st
 
 from utils.content import load_markdown, remove_image_markdown
@@ -131,16 +132,32 @@ def _extract_tool_chips(body: str) -> list[str]:
     return [c for c in chips if c]
 
 
-@st.dialog("Project Preview", width="large")
-def _enlarge_preview(project: PortfolioProject, asset_dir: Path) -> None:
-    """Full-resolution dialog modal for inspecting project media."""
+@st.dialog("Project Preview", width="small")
+def _enlarge_preview_portrait(project: PortfolioProject, asset_dir: Path) -> None:
+    """Restrained dialog modal for inspecting portrait project media without vertical blowout."""
     st.subheader(project.title)
     meta = " · ".join(filter(None, [_metadata_value(project.body, "Role"), _metadata_value(project.body, "Status")]))
     if meta:
         st.caption(meta)
     img_path = asset_dir / project.preview_relative_path
     if img_path.is_file():
-        st.image(str(img_path), width="stretch", alt=f"{project.title} full preview")
+        with st.container(key="pf_modal_image_stage"):
+            st.image(str(img_path), alt=f"{project.title} preview")
+    else:
+        st.warning(f"Preview unavailable for {project.title}.")
+
+
+@st.dialog("Project Preview", width="large")
+def _enlarge_preview_landscape(project: PortfolioProject, asset_dir: Path) -> None:
+    """Full-resolution dialog modal for inspecting landscape project media."""
+    st.subheader(project.title)
+    meta = " · ".join(filter(None, [_metadata_value(project.body, "Role"), _metadata_value(project.body, "Status")]))
+    if meta:
+        st.caption(meta)
+    img_path = asset_dir / project.preview_relative_path
+    if img_path.is_file():
+        with st.container(key="pf_modal_image_stage"):
+            st.image(str(img_path), alt=f"{project.title} preview")
     else:
         st.warning(f"Preview unavailable for {project.title}.")
 
@@ -172,8 +189,19 @@ def _render_project_index(projects: dict[str, PortfolioProject]) -> None:
                 )
 
 
+def _is_portrait(image_path: Path) -> bool:
+    """Return True if image orientation is portrait (height > width)."""
+    if not image_path.is_file():
+        return False
+    try:
+        with Image.open(image_path) as img:
+            return img.height > img.width
+    except Exception:
+        return False
+
+
 def _render_project_stage(project: PortfolioProject, asset_dir: Path) -> None:
-    """Balanced two-column hero stage: Identity & Overview on left, scaled preview on right."""
+    """Balanced two-column hero stage: Identity & Overview on left, adaptive preview on right."""
     status = _metadata_value(project.body, "Status") or "Active"
     role = _metadata_value(project.body, "Role") or "Solo Developer"
     repo_url = _metadata_link(project.body, "Repository")
@@ -182,16 +210,17 @@ def _render_project_stage(project: PortfolioProject, asset_dir: Path) -> None:
     img_path = asset_dir / project.preview_relative_path
     sections_dict = _sections(project.body)
     overview_text = sections_dict.get("Overview", "")
+    is_portrait = _is_portrait(img_path)
 
-    info_col, preview_col = st.columns([1.1, 0.9], gap="large")
+    info_col, preview_col = st.columns([1.05, 0.95], gap="large")
 
     with info_col:
         st.subheader(project.title)
         st.caption(f"{role}  ·  {status}")
 
         if chips:
-            chips_html = "".join(f'<span class="pf-chip">{c}</span>' for c in chips)
-            st.markdown(f'<div class="pf-chips-wrapper">{chips_html}</div>', unsafe_allow_html=True)
+            chips_html = " ".join(f'<span class="pf-chip">{c}</span>' for c in chips)
+            st.html(f'<div class="pf-chips-wrapper">{chips_html}</div>')
 
         with st.container(horizontal=True):
             if repo_url:
@@ -204,20 +233,23 @@ def _render_project_stage(project: PortfolioProject, asset_dir: Path) -> None:
             st.markdown(overview_text)
 
     with preview_col:
-        with st.container(key="pf_preview_frame"):
+        frame_key = "pf_preview_frame_portrait" if is_portrait else "pf_preview_frame_landscape"
+        with st.container(key=frame_key):
             if img_path.is_file():
                 st.image(str(img_path), width="stretch", alt=f"{project.title} preview")
             else:
                 st.caption(f"Preview unavailable for {project.title}.")
 
         if img_path.is_file():
-            st.button(
+            if st.button(
                 "Enlarge Preview",
                 icon=":material/zoom_in:",
-                key="pf_enlarge_btn",
-                on_click=_enlarge_preview,
-                args=(project, asset_dir),
-            )
+                key=f"pf_enlarge_{project.slug}",
+            ):
+                if is_portrait:
+                    _enlarge_preview_portrait(project, asset_dir)
+                else:
+                    _enlarge_preview_landscape(project, asset_dir)
 
 
 def _render_project_tabs(project: PortfolioProject) -> None:

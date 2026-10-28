@@ -458,22 +458,82 @@ textarea:focus-visible,
   color: var(--portfolio-foreground);
 }
 
-/* Preview Viewport Frame — Properly scaled, contained, non-dominating */
+/* ══════════════════════════════════════════════════════════════════════════════
+   PORTFOLIO ADAPTIVE PREVIEW VIEWPORT
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Common base for preview frames */
 [class*="st-key-pf_preview_frame"] {
   border: 1px solid var(--portfolio-border) !important;
-  background: #111 !important;
-  max-height: 290px !important;
+  background: var(--portfolio-surface) !important;
   overflow: hidden !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 0.6rem !important;
   border-radius: 0 !important;
+  padding: 0 !important;
+  transition: border-color 160ms ease-out !important;
 }
 
-[class*="st-key-pf_preview_frame"] img {
-  max-height: 275px !important;
+[class*="st-key-pf_preview_frame"] [data-testid="stElementContainer"],
+[class*="st-key-pf_preview_frame"] [data-testid="stFullScreenFrame"] {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+[class*="st-key-pf_preview_frame"]:hover {
+  border-color: var(--portfolio-accent) !important;
+}
+
+/* 1. Landscape Preview Card (Neofetch, N-Queens, VWSim) */
+[class*="st-key-pf_preview_frame_landscape"] {
+  width: 100% !important;
+  height: 340px !important;
+  max-height: 340px !important;
+  background: #121212 !important;
+}
+
+[class*="st-key-pf_preview_frame_landscape"] img {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 340px !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  display: block !important;
+  margin: 0 auto !important;
+  transition: transform 240ms ease-out !important;
+}
+
+[class*="st-key-pf_preview_frame_landscape"]:hover img {
+  transform: scale(1.015) !important;
+}
+
+/* 2. Portrait Preview Card (DeskDuck, BantAI Buddy) */
+[class*="st-key-pf_preview_frame_portrait"] {
+  width: 100% !important;
+  height: 310px !important;
+  max-height: 310px !important;
+  margin: 0 auto !important;
+  background: #121212 !important;
+}
+
+[class*="st-key-pf_preview_frame_portrait"] [data-testid="stImageContainer"],
+[class*="st-key-pf_preview_frame_portrait"] [data-testid="stImage"] {
+  height: 100% !important;
+  max-height: 310px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 0 auto !important;
+}
+
+[class*="st-key-pf_preview_frame_portrait"] img {
   width: auto !important;
+  height: 100% !important;
+  max-height: 310px !important;
   max-width: 100% !important;
   object-fit: contain !important;
   border-radius: 0 !important;
@@ -482,16 +542,68 @@ textarea:focus-visible,
   transition: transform 240ms ease-out !important;
 }
 
-[class*="st-key-pf_preview_frame"]:hover img {
-  transform: scale(1.02) !important;
+[class*="st-key-pf_preview_frame_portrait"]:hover img {
+  transform: scale(1.015) !important;
 }
 
 /* Enlarge button below preview */
-[class*="st-key-pf_enlarge_btn"] button {
-  min-height: 32px !important;
-  height: 32px !important;
-  font-size: 0.75rem !important;
-  margin-top: 0.5rem !important;
+[class*="st-key-pf_enlarge_"] {
+  display: flex !important;
+  justify-content: flex-start !important;
+}
+
+[class*="st-key-pf_enlarge_"] button {
+  min-height: 34px !important;
+  height: 34px !important;
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.03em !important;
+  margin-top: 0.65rem !important;
+  border-radius: 0 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   PORTFOLIO ENLARGE PREVIEW MODAL DIALOG
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+[role="dialog"] {
+  background: #191919 !important;
+  border: 1px solid var(--portfolio-border) !important;
+  border-radius: 0 !important;
+  max-height: 85vh !important;
+  overflow-y: auto !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8) !important;
+}
+
+[role="dialog"] [class*="st-key-pf_modal_image_stage"],
+[role="dialog"] [data-testid="stElementContainer"]:has([data-testid="stImage"]),
+[role="dialog"] [data-testid="stFullScreenFrame"],
+[role="dialog"] [data-testid="stImage"],
+[role="dialog"] [data-testid="stImageContainer"] {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+[role="dialog"] [class*="st-key-pf_modal_image_stage"],
+[role="dialog"] [data-testid="stFullScreenFrame"],
+[role="dialog"] [data-testid="stImage"],
+[role="dialog"] [data-testid="stImageContainer"] {
+  max-height: 70vh !important;
+  width: 100% !important;
+}
+
+[role="dialog"] img {
+  max-height: 68vh !important;
+  width: auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
   border-radius: 0 !important;
 }
 
@@ -551,8 +663,8 @@ textarea:focus-visible,
 }
 
 /* Strict Red Muted Accent on Inline Code Spans — Overrides default green */
-:not(pre) > code,
-[data-testid="stMarkdownContainer"] :not(pre) > code {
+:not(pre)>code,
+[data-testid="stMarkdownContainer"] :not(pre)>code {
   color: var(--portfolio-accent-strong) !important;
   background: var(--portfolio-surface-raised) !important;
   border: 1px solid var(--portfolio-border) !important;
@@ -568,7 +680,8 @@ textarea:focus-visible,
 [data-testid="stCode"] code,
 [data-testid="stCode"] code[class*="language-"] {
   font-family: "JetBrains Mono", monospace !important;
-  font-size: 0.95rem !important; /* matches p font-size */
+  font-size: 0.95rem !important;
+  /* matches p font-size */
   line-height: 1.6 !important;
 }
 
