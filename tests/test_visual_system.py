@@ -107,3 +107,17 @@ class VisualSystemTests(unittest.TestCase):
         self.assertIn("@keyframes feedback-signal-trace", motion_css)
         self.assertIn("@keyframes feedback-submit-release", motion_css)
         self.assertIn("prefers-reduced-motion: reduce", motion_css)
+
+    def test_page_change_resets_the_streamlit_scroll_container(self) -> None:
+        script = Path("ui/motion/motion.js").read_text(encoding="utf-8")
+
+        self.assertIn(
+            "const MAIN_SCROLL_SELECTOR = '[data-testid=\"stMain\"]';",
+            script,
+        )
+        self.assertIn("const resetPageScroll = () =>", script)
+        self.assertIn(
+            "if (activePage && nextPage && nextPage !== activePage)",
+            script,
+        )
+        self.assertIn("scrollContainer?.scrollTo", script)

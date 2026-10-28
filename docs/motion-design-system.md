@@ -124,8 +124,11 @@ The runtime follows `mount → discover → observe → animate → cleanup`.
    reruns.
 5. Page-scoped reveal memory prevents unchanged content from replaying during a
    trivial widget rerun; project replacements, dialogs, and feedback can replay.
-6. Pointer and scroll writes are batched through animation frames.
-7. The returned component cleanup aborts listeners, disconnects observers,
+6. A semantic page change resets Streamlit's main scroll container immediately
+   and once more on the next animation frame, while same-page reruns preserve
+   position.
+7. Pointer and scroll writes are batched through animation frames.
+8. The returned component cleanup aborts listeners, disconnects observers,
    cancels pending frames, removes project-owned attributes, and restores inline
    properties.
 

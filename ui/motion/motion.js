@@ -1,6 +1,7 @@
 const ENGINE_KEY = "__arthPortfolioMotionEngine";
-const ENGINE_VERSION = "1.0.2";
+const ENGINE_VERSION = "1.0.3";
 const ROOT_SELECTOR = '[data-testid="stAppViewContainer"]';
+const MAIN_SCROLL_SELECTOR = '[data-testid="stMain"]';
 const PAGE_ROOTS = [
   ["about", ".st-key-about_page"],
   ["autobiography", ".st-key-autobiography_page"],
@@ -163,6 +164,7 @@ function createMotionEngine() {
   const initialGroupsBound = new Set();
   let destroyed = false;
   let discoveryFrame = 0;
+  let pageScrollFrame = 0;
   let scrollFrame = 0;
   let autobiographyTimeline = null;
   let activePage = "";
@@ -352,6 +354,28 @@ function createMotionEngine() {
     if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScrollProgress);
   };
 
+  const setPageScrollTop = () => {
+    const scrollContainer = document.querySelector(MAIN_SCROLL_SELECTOR);
+    scrollContainer?.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
+    if (document.scrollingElement !== scrollContainer) {
+      document.scrollingElement?.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "auto",
+      });
+    }
+  };
+
+  const resetPageScroll = () => {
+    if (pageScrollFrame) cancelAnimationFrame(pageScrollFrame);
+    setPageScrollTop();
+    pageScrollFrame = requestAnimationFrame(() => {
+      pageScrollFrame = 0;
+      setPageScrollTop();
+    });
+  };
+
   const pruneDetachedTargets = () => {
     revealTargets.forEach((element) => {
       if (!element.isConnected) {
@@ -371,6 +395,9 @@ function createMotionEngine() {
     const nextPage = PAGE_ROOTS.find(([, selector]) =>
       document.querySelector(selector),
     )?.[0];
+    if (activePage && nextPage && nextPage !== activePage) {
+      resetPageScroll();
+    }
     if (nextPage && nextPage !== activePage) {
       activePage = nextPage;
       seenRevealIdentities.clear();
@@ -431,6 +458,12 @@ function createMotionEngine() {
       signal,
       passive: true,
     });
+    document
+      .querySelector(MAIN_SCROLL_SELECTOR)
+      ?.addEventListener("scroll", scheduleScrollProgress, {
+        signal,
+        passive: true,
+      });
     window.addEventListener("resize", scheduleScrollProgress, {
       signal,
       passive: true,
@@ -456,6 +489,7 @@ function createMotionEngine() {
     mutationObserver.disconnect();
     intersectionObserver?.disconnect();
     if (discoveryFrame) cancelAnimationFrame(discoveryFrame);
+    if (pageScrollFrame) cancelAnimationFrame(pageScrollFrame);
     if (scrollFrame) cancelAnimationFrame(scrollFrame);
 
     revealTargets.forEach((element) => {
