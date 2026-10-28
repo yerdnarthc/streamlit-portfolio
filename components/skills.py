@@ -126,13 +126,11 @@ def _skills_theater(frame) -> None:
             st.dataframe(
                 filtered_frame[table_columns],
                 column_config={
-                    "Skill": st.column_config.TextColumn("Skill", width=320),
+                    "Skill": st.column_config.TextColumn("Skill", width=300),
                     "Rating": st.column_config.NumberColumn(
                         "Rating", width="small", alignment="left", format="%d"
                     ),
-                    "How I Use It": st.column_config.TextColumn(
-                        "How I Use It", width=900
-                    ),
+                    "How I Use It": st.column_config.TextColumn("How I Use It"),
                 },
                 hide_index=True,
                 width="stretch",
